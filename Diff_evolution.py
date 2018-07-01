@@ -1,4 +1,5 @@
 from scipy.io import loadmat
+import numpy as np
 
 FILE_PARAM = loadmat('mediciones.mat')
 
@@ -15,7 +16,9 @@ F = 0.5  # Friction coefficient
 # Search space of the parameters
 R_MIN = 0.4
 R_MAX = 1.2
-L_MIN = 0.00015
+L_MIN = 0.00010
+L_MAX = 0.00020
+J_MIN = 0.00015
 J_MAX = 0.00030
 LAM_MIN = 0.1090
 LAM_MAX = 0.1107
@@ -37,8 +40,20 @@ def error_function(iap: float, ibp: float, wp: float) -> float:
     pass
 
 
-def objective_function():
+def fitness_function(i_time: int, population_in: list):
     pass
+
+
+def create_pop(pop_size: int, problem_size: int) -> list:
+    population = []
+    for _ in range(pop_size):
+        temp = {}
+        temp['R'] = (np.random.uniform(R_MIN, R_MAX, problem_size))
+        temp['L'] = (np.random.uniform(L_MIN, L_MAX, problem_size))
+        temp['J'] = (np.random.uniform(J_MIN, J_MAX, problem_size))        
+        temp['LAM'] = (np.random.uniform(LAM_MIN, LAM_MAX, problem_size))
+        population.append(temp)
+    return population
 
 
 def random_vector():
@@ -61,12 +76,19 @@ def select_population():
     pass
 
 
-def search():
+def search(max_gen: int, pop_size: int, problem_size: int,
+           wf: float, cr: float) -> list:
     pass
 
 
 def main():
-    pass
+    problem_size = 3
+    max_gen = len(FILE_PARAM['time'][0])
+    pop_size = 30
+    weight_f = 0.8
+    cross_f = 0.9
+    best = search(max_gen, pop_size, problem_size, weight_f, cross_f)
+    print(best)
 
 
 if __name__ == '__main__':
