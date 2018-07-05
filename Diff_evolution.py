@@ -227,16 +227,20 @@ def select_population(parents, children, pop_size):
 
 def search(max_gen: int, pop_size: int, problem_size: int,
            wf: float, cr: float) -> list:
+    gen = 0
     pop = create_pop(pop_size, problem_size)
-    # fitness_function(0, pop)
-    # print(select_parents(pop, 2))
-    for i in pop:
-        print(i)
-    print('_____________________')
-    children = create_children(pop, problem_size, wf, cr)
-    for i in children:
-        print(i)
-    pass
+    fitness_function(gen, pop)
+    best = min(pop, key=lambda p: p['Error'])
+    while gen < max_gen and best['Error'] > 2:
+        children = create_children(pop, problem_size, wf, cr)
+        fitness_function(gen, children)
+        pop = select_population(pop, children, pop_size)
+        pop.sort(key=lambda p: p['Error'])
+        if pop[0]['Error'] < best['Error']:
+            best = pop[0]
+        print('Gen: {}, fitness: {}'.format(gen, best['Error']))
+        gen += 1
+    return best
 
 
 def main():
