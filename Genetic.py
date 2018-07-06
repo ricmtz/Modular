@@ -132,15 +132,14 @@ def create_pop(pop_size, problem_size):
     pass
 
 
-def select_parents(pop, pop_size):
+def select_parents(best_p):
     """
     Parameters
     ----------
-    pop : list
-
-    pop_size : int
+    best_p : int
     """
-    pass
+    p1, p2 = np.random.choice(best_p, 2, replace=False)
+    return [p1, p2]
 
 
 def crossover(p1, p2, problem_size):
@@ -165,40 +164,81 @@ def crossover(p1, p2, problem_size):
         child['J'][i] = p1['J'][i]
         child['LAM'][i] = p1['LAM'][i]
     for i in range(cut, problem_size):
-        child['R'][i] = p1['R'][i]
-        child['L'][i] = p1['L'][i]
-        child['J'][i] = p1['J'][i]
-        child['LAM'][i] = p1['LAM'][i]
+        child['R'][i] = p2['R'][i]
+        child['L'][i] = p2['L'][i]
+        child['J'][i] = p2['J'][i]
+        child['LAM'][i] = p2['LAM'][i]
     return child
 
 
-def make_crossover(pop, problem_size):
+def make_crossover(pop, pop_size, problem_size, best_p):
     """
     Parameters
     ----------
     pop : list
 
+    pop_size: int
+
     problem_size : int
+
+    best_p : int
     """
-    pass
+    children = []
+    for i in range(pop_size):
+        p1, p2 = select_parents(best_p)
+        child = crossover(pop[p1], pop[p2], problem_size)
+        children.append(child)
+    return children
 
 
-def mutate(s):
+def mutate(s, problem_size):
     """
     s : dict
     """
-    pass
+    r, l, j, lam = np.random.choice(problem_size, 4)
+    s['R'][r] = np.random.uniform(R_MIN, R_MAX)
+    s['L'][l] = np.random.uniform(L_MIN, L_MAX)
+    s['J'][j] = np.random.uniform(J_MIN, J_MAX)
+    s['LAM'][lam] = np.random.uniform(LAM_MIN, LAM_MAX)
 
 
-def main(pop_size, problem_size, pm):
+def search(pop_size, problem_size, best_p, max_gen, pm):
     """
     pop_size : int
 
     problem_size : int
 
+    best_p : int
+
+    max_gen : int
+
     pm : float
     """
-    pass
+    gen = 0
+    pop = create_pop(pop_size, problem_size)
+    fitness_function(gen, pop)
+    best = min(pop, key=lambda p: p['Error'])
+    while gen < max_gen and best['Error'] > 2:    
+        children = make_crossover(pop, pop_size, problem_size, best_p)
+        if gen % pm == 0:
+            pos = np.random.randint(pop_size)
+            mutate(children[pos], problem_size)
+        fitness_function(gen, children)
+        best = min(children, key=lambda p: p['Error'])
+        pop = children
+        print('Gen: {}, Error: {}'.format(gen, best['Error']))
+        gen += 1
+    return best
+
+
+def main():
+    pop_size = 20
+    problem_size = 3
+    best_p = 8
+    max_gen = len(FILE_PARAM['time'][0])
+    pm = 50
+    solution = search(pop_size, problem_size, best_p, max_gen, pm)
+    print(solution)
 
 
 if __name__ == '__main__':
