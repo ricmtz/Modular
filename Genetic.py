@@ -153,7 +153,23 @@ def crossover(p1, p2, problem_size):
 
     problem_size : int
     """
-    pass
+    cut = np.random.randint(int(problem_size*.2), int(problem_size*.8))
+    child = {'R': np.zeros(problem_size),
+             'L': np.zeros(problem_size),
+             'J': np.zeros(problem_size),
+             'LAM': np.zeros(problem_size)
+             }
+    for i in range(cut):
+        child['R'][i] = p1['R'][i]
+        child['L'][i] = p1['L'][i]
+        child['J'][i] = p1['J'][i]
+        child['LAM'][i] = p1['LAM'][i]
+    for i in range(cut, problem_size):
+        child['R'][i] = p1['R'][i]
+        child['L'][i] = p1['L'][i]
+        child['J'][i] = p1['J'][i]
+        child['LAM'][i] = p1['LAM'][i]
+    return child
 
 
 def make_crossover(pop, problem_size):
