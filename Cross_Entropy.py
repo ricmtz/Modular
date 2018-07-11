@@ -124,10 +124,23 @@ def create_pop(pop_size: int, problem_size: int) -> list:
     return population
 
 
-def random_gaussian():
+def random_gaussian(mean=0.0, stdev=1.0):
     """
+    Parameters
+    ----------
+    mean : float
+
+    stdev : float
     """
-    pass
+    u1 = u2 = w = 0
+    while True:
+        u1 = 2 * np.random.rand() - 1
+        u2 = 2 * np.random.rand() - 1
+        w = u1 * u1 + u2 * u2
+        if w >= 1:
+            break
+    w = math.sqrt((-2.0 * math.log(w)) / w)
+    return mean + (u2 * w) * stdev
 
 
 def generate_sample():
