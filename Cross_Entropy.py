@@ -128,7 +128,7 @@ def create_solution(problem_size):
 
 def create_pop(pop_size: int, problem_size: int) -> list:
     population = []
-    for _ in range(pop_size):        
+    for _ in range(pop_size):
         population.append(create_solution(problem_size))
     return population
 
@@ -146,9 +146,9 @@ def random_gaussian(mean=0.0, stdev=1.0):
         u1 = 2 * np.random.rand() - 1
         u2 = 2 * np.random.rand() - 1
         w = u1 * u1 + u2 * u2
-        if w >= 1:
-            break
-    w = math.sqrt((-2.0 * math.log(w)) / w)
+        if w < 1:
+            break    
+    w = math.sqrt((-2.0 * math.log10(w)) / w)
     return mean + (u2 * w) * stdev
 
 
@@ -176,8 +176,8 @@ def generate_sample(problem_size, means, stdevs):
         aux['L'][i] = L_MIN if aux['L'][i] < L_MIN else aux['L'][i]
         aux['L'][i] = L_MAX if aux['L'][i] > L_MAX else aux['L'][i]
         aux['J'][i] = random_gaussian(means['J'][i], stdevs['J'][i])
-        aux['j'][i] = J_MIN if aux['j'][i] < J_MIN else aux['j'][i]
-        aux['j'][i] = J_MAX if aux['j'][i] > J_MAX else aux['j'][i]
+        aux['J'][i] = J_MIN if aux['J'][i] < J_MIN else aux['J'][i]
+        aux['J'][i] = J_MAX if aux['J'][i] > J_MAX else aux['J'][i]
         aux['LAM'][i] = random_gaussian(means['LAM'][i], stdevs['LAM'][i])
         aux['LAM'][i] = LAM_MIN if aux['LAM'][i] < LAM_MIN else aux['LAM'][i]
         aux['LAM'][i] = LAM_MAX if aux['LAM'][i] > LAM_MAX else aux['LAM'][i]
@@ -256,14 +256,50 @@ def update_distribution(samples, alpha, problem_size, means, stdevs):
                                                         i, 'LAM')))
 
 
-def search():
+def search(problem_size, max_iter, num_samples, num_update, learning_r):
     """
+    Parameters
+    ----------
+    problem_size : int
+
+    max_iter : int
+
+    num_samples : int
+
+    num_update : int
+
+    learning_r : float
     """
-    pass
+    means = create_solution(problem_size)
+    stdevs = {
+        'R': np.full(problem_size, R_MAX - R_MIN),
+        'L': np.full(problem_size, L_MAX - L_MIN),
+        'J': np.full(problem_size, J_MAX - J_MIN),
+        'LAM': np.full(problem_size, LAM_MAX - LAM_MIN)
+    }
+    best = None
+    for i in range(max_iter):
+        samples = [generate_sample(problem_size, means, stdevs)
+                   for _ in range(num_samples)]
+        fitness_function(i, samples)
+        samples.sort(key=lambda s: s['Error'])
+        if best is None or samples[0]['Error'] < best['Error']:
+            best = samples[0]
+        selected = samples[:num_update]
+        update_distribution(selected, learning_r, problem_size, means, stdevs)
+        print('Gen:{}, Error:{}'.format(i, best['Error']))
+    return best
 
 
 def main():
-    pass
+    problem_size = 3
+    max_iter = 100
+    num_samples = 50
+    num_update = 5
+    learning_r = 0.0007
+    solution = search(problem_size, max_iter,
+                      num_samples, num_update, learning_r)
+    print(solution)
 
 
 if __name__ == '__main__':
