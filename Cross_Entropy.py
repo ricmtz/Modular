@@ -143,22 +143,70 @@ def random_gaussian(mean=0.0, stdev=1.0):
     return mean + (u2 * w) * stdev
 
 
-def generate_sample():
+def generate_sample(problem_size, means, stdevs):
     """
+    Parameters
+    ----------.
+    problem_size : int
+
+    means : dict
+
+    stdevs : dict
     """
-    pass
+    aux = {
+        'R': np.zeros(problem_size),
+        'L': np.zeros(problem_size),
+        'J': np.zeros(problem_size),
+        'LAM': np.zeros(problem_size)
+    }
+    for i in range(problem_size):
+        aux['R'][i] = random_gaussian(means['R'][i], stdevs['R'][i])
+        aux['R'][i] = R_MIN if aux['R'][i] < R_MIN else aux['R'][i]
+        aux['R'][i] = R_MAX if aux['R'][i] > R_MAX else aux['R'][i]
+        aux['L'][i] = random_gaussian(means['L'][i], stdevs['L'][i])
+        aux['L'][i] = L_MIN if aux['L'][i] < L_MIN else aux['L'][i]
+        aux['L'][i] = L_MAX if aux['L'][i] > L_MAX else aux['L'][i]
+        aux['J'][i] = random_gaussian(means['J'][i], stdevs['J'][i])
+        aux['j'][i] = J_MIN if aux['j'][i] < J_MIN else aux['j'][i]
+        aux['j'][i] = J_MAX if aux['j'][i] > J_MAX else aux['j'][i]
+        aux['LAM'][i] = random_gaussian(means['LAM'][i], stdevs['LAM'][i])
+        aux['LAM'][i] = LAM_MIN if aux['LAM'][i] < LAM_MIN else aux['LAM'][i]
+        aux['LAM'][i] = LAM_MAX if aux['LAM'][i] > LAM_MAX else aux['LAM'][i]
+    return aux
 
 
-def mean_attr():
+def mean_attr(samples, i, param):
     """
+    Parameters
+    ----------
+    samples : list
+
+    i : int
+
+    param : string
     """
-    pass
+    r = 0
+    for s in samples:
+        r += s[param][i]
+    return (r / float(len(samples)))
 
 
-def stdev_attr():
+def stdev_attr(samples, mean, i, param):
     """
+    Parameters
+    ----------
+    samples : list
+
+    mean : float
+
+    i : int
+
+    param : string
     """
-    pass
+    r = 0
+    for s in samples:
+        r += (s[param][i] - mean) ** 2
+    return math.sqrt(r / float(len(samples)))
 
 
 def update_distribution():
