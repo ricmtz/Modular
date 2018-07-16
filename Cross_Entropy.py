@@ -112,15 +112,24 @@ def fitness_function(i_time, pop):
         i['Error'] = calc_error(i_time, i['R'], i['L'], i['J'], i['LAM'])
 
 
+def create_solution(problem_size):
+    """
+    Parameters
+    ----------
+    problem_size : int
+    """
+    temp_s = {}
+    temp_s['R'] = (np.random.uniform(R_MIN, R_MAX, problem_size))
+    temp_s['L'] = (np.random.uniform(L_MIN, L_MAX, problem_size))
+    temp_s['J'] = (np.random.uniform(J_MIN, J_MAX, problem_size))
+    temp_s['LAM'] = (np.random.uniform(LAM_MIN, LAM_MAX, problem_size))
+    return temp_s
+
+
 def create_pop(pop_size: int, problem_size: int) -> list:
     population = []
-    for _ in range(pop_size):
-        temp_s = {}
-        temp_s['R'] = (np.random.uniform(R_MIN, R_MAX, problem_size))
-        temp_s['L'] = (np.random.uniform(L_MIN, L_MAX, problem_size))
-        temp_s['J'] = (np.random.uniform(J_MIN, J_MAX, problem_size))
-        temp_s['LAM'] = (np.random.uniform(LAM_MIN, LAM_MAX, problem_size))
-        population.append(temp_s)
+    for _ in range(pop_size):        
+        population.append(create_solution(problem_size))
     return population
 
 
@@ -209,10 +218,42 @@ def stdev_attr(samples, mean, i, param):
     return math.sqrt(r / float(len(samples)))
 
 
-def update_distribution():
+def update_distribution(samples, alpha, problem_size, means, stdevs):
     """
+    Parameters
+    ----------
+    samples: list
+
+    alpha : float
+
+    problem_size : int
+
+    means : dict
+
+    stdevs : dict
     """
-    pass
+    for i in range(problem_size):
+        means['R'][i] = (alpha * means['R'][i] +
+                         ((1.0 - alpha) * mean_attr(samples, i, 'R')))
+        stdevs['R'][i] = (alpha * stdevs['R'][i] +
+                          ((1.0 - alpha) * stdev_attr(samples,
+                                                      means['R'][i], i, 'R')))
+        means['L'][i] = (alpha * means['L'][i] +
+                         ((1.0 - alpha) * mean_attr(samples, i, 'L')))
+        stdevs['L'][i] = (alpha * stdevs['L'][i] +
+                          ((1.0 - alpha) * stdev_attr(samples,
+                                                      means['L'][i], i, 'L')))
+        means['J'][i] = (alpha * means['J'][i] +
+                         ((1.0 - alpha) * mean_attr(samples, i, 'J')))
+        stdevs['J'][i] = (alpha * stdevs['J'][i] +
+                          ((1.0 - alpha) * stdev_attr(samples,
+                                                      means['J'][i], i, 'J')))
+        means['LAM'][i] = (alpha * means['LAM'][i] +
+                           ((1.0 - alpha) * mean_attr(samples, i, 'LAM')))
+        stdevs['LAM'][i] = (alpha * stdevs['LAM'][i] +
+                            ((1.0 - alpha) * stdev_attr(samples,
+                                                        means['LAM'][i],
+                                                        i, 'LAM')))
 
 
 def search():
