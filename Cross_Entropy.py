@@ -147,7 +147,7 @@ def random_gaussian(mean=0.0, stdev=1.0):
         u2 = 2 * np.random.rand() - 1
         w = u1 * u1 + u2 * u2
         if w < 1:
-            break    
+            break
     w = math.sqrt((-2.0 * math.log10(w)) / w)
     return mean + (u2 * w) * stdev
 
