@@ -227,15 +227,18 @@ def search(pop_size, problem_size, best_p, max_gen, pm):
     gen = 0
     pop = create_pop(pop_size, problem_size)
     fitness_function(gen, pop)
-    best = min(pop, key=lambda p: p['Error'])
+    pop.sort(key=lambda p: p['Error'])
+    best = pop[0]
     emc.append(best['Error'])
     while gen < max_gen and best['Error'] > 0.1:
         children = make_crossover(pop, pop_size, problem_size, best_p)
-        if gen % pm == 0:
+        if np.random.rand() < pm:
+            print("Mutation aplided")
             pos = np.random.randint(pop_size)
             mutate(children[pos], problem_size)
         fitness_function(gen, children)
-        best = min(children, key=lambda p: p['Error'])
+        children.sort(key=lambda p: p['Error'])
+        best = children[0]
         emc.append(best['Error'])
         pop = children
         print('Gen: {}, Error: {}'.format(gen, best['Error']))
@@ -248,7 +251,7 @@ def main():
     problem_size = 6
     best_p = 15
     max_gen = 500
-    pm = 50
+    pm = 0.2
     solution, error = search(pop_size, problem_size, best_p, max_gen, pm)
     print(solution)
     time = FILE_PARAM['time'][0][:60]
@@ -267,11 +270,11 @@ def main():
         ib = []
         w = []
         for j in range(len(time)):
+            w.append(w_function(i, solution['J'][i], solution['LAM'][i]))
             ia.append(i_alpha_function(
                 j, solution['R'][i], solution['L'][i], solution['LAM'][i]))
             ib.append(i_beta_function(
                 j, solution['R'][i], solution['L'][i], solution['LAM'][i]))
-            w.append(w_function(i, solution['J'][i], solution['LAM'][i]))
         ax1.plot(time, ia, 'b-')
         ax2.plot(time, ib, 'b-')
         ax3.plot(time, w, 'b-')
