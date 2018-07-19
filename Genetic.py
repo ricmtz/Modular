@@ -2,23 +2,24 @@ from scipy.io import loadmat
 from scipy.linalg import norm
 import numpy as np
 import math
+import matplotlib.pyplot as plt
 
 FILE_PARAM = loadmat('mediciones.mat')
 
 I_ALPHA = FILE_PARAM['ia']  # Stator current
 I_BETA = FILE_PARAM['ib']  # Stator current
 CI = FILE_PARAM['ic']  # Load torque
-W = FILE_PARAM['vel']  # Speed
+THETA = FILE_PARAM['vel']  # Speed
 
 P = 2  # Poles number
-U_ALPHA = 0.05  # Estandor's voltage
-U_BETA = 0.05  # Estandor's voltage
-F = 0.0001  # Friction coefficient
+U_ALPHA = 0.00005  # Estandor's voltage
+U_BETA = 0.00005  # Estandor's voltage
+F = 0.001  # Friction coefficient
 
 # Search space of the parameters
-R_MIN = 0.4
-R_MAX = 1.2
-L_MIN = 0.00010
+R_MIN = 0.0004
+R_MAX = 0.0012
+L_MIN = 0.0010
 L_MAX = 0.00020
 J_MIN = 0.00015
 J_MAX = 0.00030
@@ -37,9 +38,12 @@ def w_function(i_time, j, lam):
     lam : numpy.array
     """
     ia = I_ALPHA[0][i_time]
-    w = W[0][i_time]
+    ib = I_BETA[0][i_time]
+    theta = THETA[0][i_time]
     ci = CI[0][i_time]
-    return (lam/j)*(-ia * math.sin(P*w)) - (F/j) * w - (ci/j)
+    w = lam/j*(-ia * math.sin(P)*theta + ib *
+               math.cos(P)*theta) - F/j * theta - ci/j
+    return w*.002
 
 
 def i_alpha_function(i_time, r, l, lam):
@@ -55,8 +59,9 @@ def i_alpha_function(i_time, r, l, lam):
     lam : numpy.array
     """
     ia = I_ALPHA[0][i_time]
-    w = W[0][i_time]
-    return ((r/l)*ia+(P*lam/l)*w*math.sin(w)+(1/l)*U_ALPHA)
+    w = theta = THETA[0][i_time]
+    d_ia = r/l*ia+P*lam/l*w*math.sin(theta)+1/l*U_ALPHA
+    return d_ia
 
 
 def i_beta_function(i_time, r, l, lam):
@@ -72,8 +77,9 @@ def i_beta_function(i_time, r, l, lam):
     lam : numpy.array
     """
     ib = I_BETA[0][i_time]
-    w = W[0][i_time]
-    return ((r/l)*ib+(P*lam/l)*w*math.cos(w)+(1/l)*U_BETA)
+    w = theta = THETA[0][i_time]
+    d_ib = r/l*ib+P*lam/l*w*math.cos(theta)+1/l*U_BETA
+    return d_ib
 
 
 def calc_error(i_time, r, l, j, lam):
@@ -92,12 +98,12 @@ def calc_error(i_time, r, l, j, lam):
     """
     ia = I_ALPHA[0][i_time]
     ib = I_BETA[0][i_time]
-    w = W[0][i_time]
+    w = THETA[0][i_time]
+    wp = w_function(i_time, j, lam)
     iap = i_alpha_function(i_time, r, l, lam)
     ibp = i_beta_function(i_time, r, l, lam)
-    wp = w_function(i_time, j, lam)
-    return abs((norm(ia) - norm(iap)) + (norm(ib) - norm(ibp))
-               + (norm(w - wp)))
+    error = (norm(ia) - norm(iap)) + (norm(ib) - norm(ibp)) + (norm(w - wp))
+    return error ** 2
 
 
 def fitness_function(i_time, pop):
@@ -109,7 +115,10 @@ def fitness_function(i_time, pop):
     pop : list
     """
     for i in pop:
-        i['Error'] = calc_error(i_time, i['R'], i['L'], i['J'], i['LAM'])
+        error = 0
+        i_size = len(i['R'])
+        error += calc_error(i_time, i['R'], i['L'], i['J'], i['LAM'])
+        i['Error'] = math.sqrt(error)/i_size
 
 
 def create_pop(pop_size, problem_size):
@@ -214,31 +223,61 @@ def search(pop_size, problem_size, best_p, max_gen, pm):
 
     pm : float
     """
+    emc = []
     gen = 0
     pop = create_pop(pop_size, problem_size)
     fitness_function(gen, pop)
     best = min(pop, key=lambda p: p['Error'])
-    while gen < max_gen and best['Error'] > 2:    
+    emc.append(best['Error'])
+    while gen < max_gen and best['Error'] > 0.1:
         children = make_crossover(pop, pop_size, problem_size, best_p)
         if gen % pm == 0:
             pos = np.random.randint(pop_size)
             mutate(children[pos], problem_size)
         fitness_function(gen, children)
         best = min(children, key=lambda p: p['Error'])
+        emc.append(best['Error'])
         pop = children
         print('Gen: {}, Error: {}'.format(gen, best['Error']))
         gen += 1
-    return best
+    return best, emc
 
 
 def main():
-    pop_size = 20
-    problem_size = 3
-    best_p = 8
-    max_gen = len(FILE_PARAM['time'][0])
+    pop_size = 100
+    problem_size = 6
+    best_p = 15
+    max_gen = 500
     pm = 50
-    solution = search(pop_size, problem_size, best_p, max_gen, pm)
+    solution, error = search(pop_size, problem_size, best_p, max_gen, pm)
     print(solution)
+    time = FILE_PARAM['time'][0][:60]
+    ax1 = plt.subplot(2, 2, 1)
+    ax2 = plt.subplot(2, 2, 2)
+    ax3 = plt.subplot(2, 2, 3)
+    ax4 = plt.subplot(2, 2, 4)
+    ax1.plot(time, I_ALPHA[0][:60], 'r-')
+    ax1.set_title('Alpha')
+    ax2.plot(time, I_BETA[0][:60], 'r-')
+    ax2.set_title('Beta')
+    ax3.plot(time, THETA[0][:60], 'r-')
+    ax3.set_title('W')
+    for i in range(problem_size):
+        ia = []
+        ib = []
+        w = []
+        for j in range(len(time)):
+            ia.append(i_alpha_function(
+                j, solution['R'][i], solution['L'][i], solution['LAM'][i]))
+            ib.append(i_beta_function(
+                j, solution['R'][i], solution['L'][i], solution['LAM'][i]))
+            w.append(w_function(i, solution['J'][i], solution['LAM'][i]))
+        ax1.plot(time, ia, 'b-')
+        ax2.plot(time, ib, 'b-')
+        ax3.plot(time, w, 'b-')
+    ax4.plot(range(len(error)), error, 'r-')
+    ax4.set_title('Evolucion')
+    plt.show()
 
 
 if __name__ == '__main__':
