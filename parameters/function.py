@@ -1,4 +1,4 @@
-from parameters import Parameter as parm
+from parameter import Parameter as parm
 import math
 
 
