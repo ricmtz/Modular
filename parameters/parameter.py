@@ -5,20 +5,21 @@ import numpy as np
 class Parameter(object):
     FILE_PARAM = loadmat('mediciones.mat')
 
+    TIME = FILE_PARAM['time'][0]
     I_ALPHA = FILE_PARAM['ia'][0]  # Stator current
     I_BETA = FILE_PARAM['ib'][0]  # Stator current
     CI = FILE_PARAM['ic'][0]  # Load torque
     THETA = FILE_PARAM['vel'][0]  # Speed
 
     P = 2  # Poles number
-    U_ALPHA = 0.00005  # Estandor's voltage
-    U_BETA = 0.00005  # Estandor's voltage
-    F = 0.001  # Friction coefficient
+    U_ALPHA = 5  # Estandor's voltage
+    U_BETA = 5  # Estandor's voltage
+    F = 0.9  # Friction coefficient
 
     # Search space of the parameters
-    R_MIN = 0.0004
-    R_MAX = 0.0012
-    L_MIN = 0.0010
+    R_MIN = 0.4
+    R_MAX = 1.2
+    L_MIN = 0.00010
     L_MAX = 0.00020
     J_MIN = 0.00015
     J_MAX = 0.00030
@@ -26,20 +27,8 @@ class Parameter(object):
     LAM_MAX = 0.1107
 
     @staticmethod
-    def get_rand_R():
-        return np.random.uniform(Parameter.R_MIN, Parameter.R_MAX)
-
-    @staticmethod
-    def get_rand_L():
-        return np.random.uniform(Parameter.L_MIN, Parameter.L_MAX)
-
-    @staticmethod
-    def get_rand_J():
-        return np.random.uniform(Parameter.J_MIN, Parameter.J_MAX)
-
-    @staticmethod
-    def get_rand_LAM():
-        return np.random.uniform(Parameter.LAM_MIN, Parameter.LAM_MAX)
+    def get_rand(bounds):
+        return np.random.uniform(*bounds)
 
     @staticmethod
     def get_i_alpha(time):

@@ -270,7 +270,7 @@ def main():
         ib = []
         w = []
         for j in range(len(time)):
-            w.append(w_function(i, solution['J'][i], solution['LAM'][i]))
+            w.append(w_function(j, solution['J'][i], solution['LAM'][i]))
             ia.append(i_alpha_function(
                 j, solution['R'][i], solution['L'][i], solution['LAM'][i]))
             ib.append(i_beta_function(

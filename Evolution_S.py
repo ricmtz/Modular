@@ -19,7 +19,7 @@ F = 0.001  # Friction coefficient
 # Search space of the parameters
 R_MIN = 0.0004
 R_MAX = 0.0012
-L_MIN = 0.0010
+L_MIN = 0.00010
 L_MAX = 0.00020
 J_MIN = 0.00015
 J_MAX = 0.00030

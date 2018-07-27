@@ -1,14 +1,14 @@
-from evolutionary.genetic import Genetic
+from evolutionary.diff_evo import DiffEvolution
 from plot import Plotter
 
 
 def main():
-    pop_size = 100
-    best_p = 15
-    max_gen = 200
-    p_m = 5
-    g = Genetic(pop_size, best_p, max_gen, p_m)
-    best, error = g.search()
+    max_gen = 50
+    pop_size = 10
+    weight_f = 0.2
+    cross_r = 0.7
+    a = DiffEvolution(max_gen, pop_size, weight_f, cross_r)
+    best, error = a.search()
     print(best.get_R(), best.get_L(), best.get_J(), best.get_LAM())
     Plotter.plot_functions(best.get_R(), best.get_L(),
                            best.get_J(), best.get_LAM(), error)

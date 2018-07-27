@@ -2,15 +2,23 @@ import numpy as np
 from parameters import Parameter as parm
 
 
-class Citizen(object):
+class CitizenS(object):
+
     BOUNDS = [(parm.R_MIN, parm.R_MAX), (parm.L_MIN, parm.L_MAX),
               (parm.J_MIN, parm.J_MAX), (parm.LAM_MIN, parm.LAM_MAX)]
 
-    def __init__(self, values=None):
+    def __init__(self, values=None, strategy=None):
         if values:
             self._values = values[:]
         else:
-            self._values = [parm.get_rand(Citizen.BOUNDS[i]) for i in range(4)]
+            self._values = [parm.get_rand(CitizenS.BOUNDS[i])
+                            for i in range(4)]
+        if strategy:
+            self._strategy = strategy[:]
+        else:
+            self._strategy = [np.random.uniform(
+                0, (CitizenS.BOUNDS[i][1] - CitizenS.BOUNDS[i][0]) * 0.05)
+                for i in range(4)]
         self._error = np.inf
 
     def set_R(self, r):
@@ -48,3 +56,9 @@ class Citizen(object):
 
     def get_values(self):
         return self._values
+
+    def set_strategy(self, strategy):
+        self._strategy = strategy[:]
+
+    def get_strategy(self):
+        return self._strategy

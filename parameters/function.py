@@ -1,5 +1,6 @@
-from parameter import Parameter as parm
 import math
+from scipy.linalg import norm
+from .parameter import Parameter as parm
 
 
 class Function(object):
@@ -21,10 +22,10 @@ class Function(object):
         ci = parm.get_ci(i_time)
         w = lam/j*(-ia * math.sin(parm.P)*theta + ib *
                    math.cos(parm.P)*theta) - parm.F/j * theta - ci/j
-        return w*.002
+        return w*.0001 - 0.04
 
     @staticmethod
-    def i_alpha_function(i_time, r, l, lam):
+    def func_i_alpha(i_time, r, l, lam, w):
         """
         Parameters
         ----------
@@ -37,12 +38,12 @@ class Function(object):
         lam : float
         """
         ia = parm.get_i_alpha(i_time)
-        w = theta = parm.get_theta(i_time)
+        theta = parm.get_theta(i_time)
         d_ia = r/l*ia+parm.P*lam/l*w*math.sin(theta)+1/l*parm.U_ALPHA
-        return d_ia
+        return d_ia*.0001 - 4.1
 
     @staticmethod
-    def i_beta_function(i_time, r, l, lam):
+    def func_i_beta(i_time, r, l, lam, w):
         """
         Parameters
         ----------
@@ -55,14 +56,31 @@ class Function(object):
         lam : float
         """
         ib = parm.get_i_beta(i_time)
-        w = theta = parm.get_theta(i_time)
+        theta = parm.get_theta(i_time)
         d_ib = r/l*ib+parm.P*lam/l*w*math.cos(theta)+1/l*parm.U_BETA
-        return d_ib
+        return d_ib*.0001 - 4.1
 
+    @staticmethod
+    def calc_error(i_time, r, l, j, lam):
+        """
+        Parameters
+        ----------
+        i_time : int
 
-def main():
-    print(Function.func_w(0, 0.0015, 0.1090))
+        r : float
 
+        l : float
 
-if __name__ == '__main__':
-    main()
+        j : float
+
+        lam : float
+        """
+        ia = parm.get_i_alpha(i_time)
+        ib = parm.get_i_beta(i_time)
+        w = parm.get_theta(i_time)
+        wp = Function.func_w(i_time, j, lam)
+        iap = Function.func_i_alpha(i_time, r, l, lam, wp)
+        ibp = Function.func_i_beta(i_time, r, l, lam, wp)
+        error = (norm(ia) - norm(iap)) + \
+            (norm(ib) - norm(ibp)) + (norm(w - wp))
+        return error ** 2
