@@ -40,15 +40,16 @@ class Genetic(object):
         return children
 
     def mutate(self, citizen):
-        value = np.random.randint(4)
-        if value == 0:
-            citizen.set_R(parm.get_rand_R())
-        elif value == 1:
-            citizen.set_L(parm.get_rand_L())
-        elif value == 2:
-            citizen.set_J(parm.get_rand_J())
-        elif value == 3:
-            citizen.set_LAM(parm.get_rand_LAM())
+        pos = np.random.randint(4)
+        aux = parm.get_rand(Citizen.BOUNDS[pos])
+        if pos == 0:
+            citizen.set_R(aux)
+        elif pos == 1:
+            citizen.set_L(aux)
+        elif pos == 2:
+            citizen.set_J(aux)
+        elif pos == 3:
+            citizen.set_LAM(aux)
 
     def search(self):
         gen = 0
@@ -58,8 +59,8 @@ class Genetic(object):
         self.fitness_func(gen, pop)
         pop.sort(key=lambda x: x.get_error())
         best = pop[0]
-        error.append(best.get_error())
-        while gen < self.max_gen and best.get_error() > 0.02:
+        error.append(sum(i.get_error() ** 2 for i in pop)/self.pop_size)
+        while gen < self.max_gen:
             children = self.make_crossover(pop)
             if np.random.rand() * 100 < self.p_m:
                 pos = np.random.randint(self.pop_size)

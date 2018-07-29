@@ -26,6 +26,9 @@ class Parameter(object):
     LAM_MIN = 0.1090
     LAM_MAX = 0.1107
 
+    BOUNDS = [(R_MIN, R_MAX), (L_MIN, L_MAX),
+              (J_MIN, J_MAX), (LAM_MIN, LAM_MAX)]
+
     @staticmethod
     def get_rand(bounds):
         return np.random.uniform(*bounds)
