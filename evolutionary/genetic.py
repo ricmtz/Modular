@@ -59,7 +59,7 @@ class Genetic(object):
         self.fitness_func(gen, pop)
         pop.sort(key=lambda x: x.get_error())
         best = pop[0]
-        error.append(sum(i.get_error() ** 2 for i in pop)/self.pop_size)
+        error.append(sum(i.get_error() for i in pop)/self.pop_size)
         while gen < self.max_gen:
             children = self.make_crossover(pop)
             if np.random.rand() * 100 < self.p_m:
