@@ -73,8 +73,6 @@ class DiffEvolution(object):
             children = self.create_children(pop)
             self.fitness_function(gen, children)
             children.sort(key=lambda x: x.get_error())
-            print('b_c: {}'.format(children[0].get_error()))
-            print('b_p: {}'.format(pop[0].get_error()))
             pop = self.select_population(pop, children)
             pop.sort(key=lambda x: x.get_error())
             if pop[0].get_error() < best.get_error():

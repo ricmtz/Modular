@@ -78,9 +78,14 @@ class Function(object):
         ia = parm.get_i_alpha(i_time)
         ib = parm.get_i_beta(i_time)
         w = parm.get_theta(i_time)
-        wp = Function.func_w(i_time, j, lam)
-        iap = Function.func_i_alpha(i_time, r, l, lam, wp)
-        ibp = Function.func_i_beta(i_time, r, l, lam, wp)
+        iap, ibp, wp = Function.calc_values(i_time, r, l, j, lam)
         error = (norm(ia) - norm(iap)) + \
             (norm(ib) - norm(ibp)) + (norm(w - wp))
         return error ** 2
+
+    @staticmethod
+    def calc_values(i_time, r, l, j, lam):
+        w = Function.func_w(i_time, j, lam)
+        ia = Function.func_i_alpha(i_time, r, l, lam, w)
+        ib = Function.func_i_beta(i_time, r, l, lam, w)        
+        return ia, ib, w
