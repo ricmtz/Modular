@@ -33,7 +33,7 @@ class Genetic(object):
 
     def make_crossover(self, pop):
         children = []
-        for _ in range(self.pop_size):
+        for _ in range(self.best_p, self.pop_size):
             p1, p2 = self.select_parents()
             child = self.crossover(pop[p1], pop[p2])
             children.append(child)
@@ -68,7 +68,7 @@ class Genetic(object):
             self.fitness_func(gen, children)
             children.sort(key=lambda x: x.get_error())
             best = children[0]
-            error.append(best.get_error())
+            error.append(sum(i.get_error() for i in pop)/self.pop_size)
             pop = children
             print('Gen: {}, Error: {}'.format(gen, best.get_error()))
             gen += 1

@@ -22,7 +22,7 @@ class Function(object):
         ci = parm.get_ci(i_time)
         w = lam/j*(-ia * math.sin(parm.P)*theta + ib *
                    math.cos(parm.P)*theta) - parm.F/j * theta - ci/j
-        return w*.0001 - 0.04
+        return w*.0001 - 0.05
 
     @staticmethod
     def func_i_alpha(i_time, r, l, lam, w):
@@ -40,7 +40,7 @@ class Function(object):
         ia = parm.get_i_alpha(i_time)
         theta = parm.get_theta(i_time)
         d_ia = r/l*ia+parm.P*lam/l*w*math.sin(theta)+1/l*parm.U_ALPHA
-        return d_ia*.0001 - 4.1
+        return d_ia*.0001 - 4
 
     @staticmethod
     def func_i_beta(i_time, r, l, lam, w):
@@ -58,7 +58,7 @@ class Function(object):
         ib = parm.get_i_beta(i_time)
         theta = parm.get_theta(i_time)
         d_ib = r/l*ib+parm.P*lam/l*w*math.cos(theta)+1/l*parm.U_BETA
-        return d_ib*.0001 - 4.1
+        return d_ib*.0001 - 4
 
     @staticmethod
     def calc_error(i_time, r, l, j, lam):
