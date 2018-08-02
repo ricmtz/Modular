@@ -3,7 +3,7 @@ from plot import Plotter
 
 
 def main():
-    pop_size = 100
+    pop_size = 200
     best_p = 15
     max_gen = 50
     p_m = 5

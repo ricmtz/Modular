@@ -20,8 +20,8 @@ class Function(object):
         ib = parm.get_i_beta(i_time)
         theta = parm.get_theta(i_time)
         ci = parm.get_ci(i_time)
-        w = lam/j*(-ia * math.sin(parm.P)*theta + ib *
-                   math.cos(parm.P)*theta) - parm.F/j * theta - ci/j
+        w = -(lam/j*(-ia * math.sin(parm.P)*theta + ib *
+                     math.cos(parm.P)*theta) - parm.F/j * theta - ci/j)
         return w*.0001 - 0.05
 
     @staticmethod
@@ -87,5 +87,5 @@ class Function(object):
     def calc_values(i_time, r, l, j, lam):
         w = Function.func_w(i_time, j, lam)
         ia = Function.func_i_alpha(i_time, r, l, lam, w)
-        ib = Function.func_i_beta(i_time, r, l, lam, w)        
+        ib = Function.func_i_beta(i_time, r, l, lam, w)
         return ia, ib, w

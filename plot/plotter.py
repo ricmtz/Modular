@@ -7,7 +7,7 @@ from parameters import Function as func
 class Plotter(object):
 
     PLT_S = 0
-    PLT_E = 80  # int(len(parm.I_ALPHA)/5)
+    PLT_E = int(len(parm.I_ALPHA)/5)
 
     @staticmethod
     def plot_functions(r, l, j, lam, error):

@@ -14,8 +14,7 @@ class Genetic(object):
 
     def fitness_func(self, i_time, pop):
         for i in pop:
-            error = func.calc_error(
-                i_time, i.get_R(), i.get_L(), i.get_J(), i.get_LAM())
+            error = func.calc_error(i_time, *i.get_values())
             i.set_error(error)
 
     def create_pop(self):
@@ -59,17 +58,21 @@ class Genetic(object):
         self.fitness_func(gen, pop)
         pop.sort(key=lambda x: x.get_error())
         best = pop[0]
-        error.append(sum(i.get_error() for i in pop)/self.pop_size)
+        # error.append(sum(i.get_error() for i in pop)/self.pop_size)
+        error.append(best.get_error())
         while gen < self.max_gen:
             children = self.make_crossover(pop)
             if np.random.rand() * 100 < self.p_m:
-                pos = np.random.randint(self.pop_size)
+                pos = np.random.randint(self.pop_size-self.best_p)
                 self.mutate(children[pos])
             self.fitness_func(gen, children)
             children.sort(key=lambda x: x.get_error())
-            best = children[0]
-            error.append(sum(i.get_error() for i in pop)/self.pop_size)
-            pop = children
+            pop = pop[:self.best_p] + children[:]
+            pop.sort(key=lambda x: x.get_error())
+            best = pop[0]
+            # error.append(sum(i.get_error() for i in pop)/self.pop_size)
+            error.append(best.get_error())
+            # pop = children
             print('Gen: {}, Error: {}'.format(gen, best.get_error()))
             gen += 1
         return best, error
