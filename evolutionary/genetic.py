@@ -36,7 +36,7 @@ class Genetic(object):
             p1, p2 = self.select_parents()
             child = self.crossover(pop[p1], pop[p2])
             children.append(child)
-        return children
+        return pop[:self.best_p] + children
 
     def mutate(self, citizen):
         pos = np.random.randint(4)
@@ -58,21 +58,21 @@ class Genetic(object):
         self.fitness_func(gen, pop)
         pop.sort(key=lambda x: x.get_error())
         best = pop[0]
-        # error.append(sum(i.get_error() for i in pop)/self.pop_size)
         error.append(best.get_error())
         while gen < self.max_gen:
             children = self.make_crossover(pop)
             if np.random.rand() * 100 < self.p_m:
-                pos = np.random.randint(self.pop_size-self.best_p)
+                pos = np.random.randint(self.best_p, self.pop_size)
+                print('--------Mutation------')
+                print(children[pos].get_values())
                 self.mutate(children[pos])
-            self.fitness_func(gen, children)
+                print(children[pos].get_values())
+                print('----------------------')
+            self.fitness_func(gen, children[self.best_p:])
             children.sort(key=lambda x: x.get_error())
-            pop = pop[:self.best_p] + children[:]
-            pop.sort(key=lambda x: x.get_error())
-            best = pop[0]
-            # error.append(sum(i.get_error() for i in pop)/self.pop_size)
+            best = children[0]
             error.append(best.get_error())
-            # pop = children
+            pop = children
             print('Gen: {}, Error: {}'.format(gen, best.get_error()))
             gen += 1
         return best, error
