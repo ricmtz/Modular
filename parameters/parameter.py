@@ -34,6 +34,10 @@ class Parameter(object):
         return np.random.uniform(*bounds)
 
     @staticmethod
+    def get_bounds():
+        return Parameter.BOUNDS
+
+    @staticmethod
     def get_i_alpha(time):
         return Parameter.I_ALPHA[time]
 
@@ -48,11 +52,3 @@ class Parameter(object):
     @staticmethod
     def get_theta(time):
         return Parameter.THETA[time]
-
-
-def main():
-    print(Parameter.I_ALPHA)
-
-
-if __name__ == '__main__':
-    main()

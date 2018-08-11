@@ -21,7 +21,8 @@ def plot_population(population, bounds, final=False):
     plt.grid(True)
 
     for particle in population:
-        plt.plot(particle.position[1], particle.position[0], marker="o", markersize=5)
+        plt.plot(particle.position[1],
+                 particle.position[0], marker="o", markersize=5)
 
     plt.draw()
     plt.pause(0.001)

@@ -1,30 +1,40 @@
-import Particle as Prt
-import util
+import numpy as np
+from .Particle import Particle as Prt
 
 
 class PSO:
-    def __init__(self, population_quantity, space_boundaries, velocity_boundaries, generations, cost_function):
-        best_cost_global = -1
+    def __init__(self, population_quantity, space_boundaries,
+                 velocity_boundaries, generations, cost_function):
+        self.population_quantity = population_quantity
+        self.space_boundaries = space_boundaries
+        self.velocity_boundaries = velocity_boundaries
+        self.generations = generations
+        self.cost_function = cost_function
+
+    def search(self):
+        error = []
+        best_cost_global = np.inf
         best_pos_global = []
 
         population = []
-        for i in range(population_quantity):
-            population.append(Prt.Particle(space_boundaries, velocity_boundaries))
+        for i in range(self.population_quantity):
+            population.append(
+                Prt(self.space_boundaries, self.velocity_boundaries))
 
         gen = 0
-        while gen < generations:
-            for i in range(population_quantity):
-                population[i].evaluate(cost_function)
+        while gen < self.generations:
+            for i in range(self.population_quantity):
+                population[i].evaluate(gen, self.cost_function)
 
-                if population[i].cost < best_cost_global or best_cost_global == -1:
+                if population[i].cost < best_cost_global or best_cost_global == np.inf:
                     best_pos_global = population[i].position.copy()
                     best_cost_global = population[i].cost
-
-            for i in range(population_quantity):
+                error.append(best_cost_global)
+            for i in range(self.population_quantity):
                 population[i].update_velocity(best_pos_global)
-                population[i].update_position(space_boundaries)
+                population[i].update_position(self.space_boundaries)
 
-            util.plot_population(population, space_boundaries, gen+1 >= generations)
             print(f"> Gen={gen+1}, Fitness={best_cost_global}")
-
             gen += 1
+
+        return best_pos_global, error

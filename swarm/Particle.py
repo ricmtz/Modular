@@ -1,5 +1,5 @@
 import random
-import util
+from .util import rand_val
 
 C1 = 1.0
 C2 = 2.0
@@ -14,13 +14,15 @@ class Particle:
         self.best_cost = self.cost
 
         for i in range(len(space_bounds)):
-            self.position.append(util.rand_val(space_bounds[i][0], space_bounds[i][1]))
-            self.velocity.append(util.rand_val(vel_bounds[i][0], vel_bounds[i][1]))
+            self.position.append(rand_val(
+                space_bounds[i][0], space_bounds[i][1]))
+            self.velocity.append(rand_val(
+                vel_bounds[i][0], vel_bounds[i][1]))
 
         self.best_pos = self.position.copy()
 
-    def evaluate(self, cost_func):
-        self.cost = cost_func(self.position)
+    def evaluate(self, i_time, cost_func):
+        self.cost = cost_func(i_time, self.position)
 
         if self.cost < self.best_cost or self.best_cost == -1:
             self.best_pos = self.position.copy()
@@ -33,7 +35,8 @@ class Particle:
 
             vel_cognitive = C1 * r1 * (self.best_pos[i] - self.position[i])
             vel_social = C2 * r2 * (best_global_pos[i] - self.position[i])
-            self.velocity[i] = W * self.velocity[i] + vel_cognitive + vel_social
+            self.velocity[i] = W * self.velocity[i] + \
+                vel_cognitive + vel_social
 
     def update_position(self, space_bounds):
         for i in range(len(space_bounds)):
