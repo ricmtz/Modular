@@ -1,4 +1,3 @@
-import numpy as np
 from .Particle import Particle as Prt
 
 
@@ -13,7 +12,7 @@ class PSO:
 
     def search(self):
         error = []
-        best_cost_global = np.inf
+        best_cost_global = -1
         best_pos_global = []
 
         population = []
@@ -26,7 +25,7 @@ class PSO:
             for i in range(self.population_quantity):
                 population[i].evaluate(gen, self.cost_function)
 
-                if population[i].cost < best_cost_global or best_cost_global == np.inf:
+                if population[i].cost < best_cost_global or best_cost_global == -1:
                     best_pos_global = population[i].position.copy()
                     best_cost_global = population[i].cost
                 error.append(best_cost_global)
