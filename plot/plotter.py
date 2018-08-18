@@ -27,6 +27,7 @@ class Plotter(object):
         ax3.set_title('W')
         ax4.plot(range(len(error)), error, 'r-')
         ax4.set_title('Evolucion')
+        ax4.semilogy()
         for i in range(len(time)):
             ia_v, ib_v, w_v = func.calc_values(i, r, l, j, lam)
             w.append(w_v)

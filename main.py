@@ -4,7 +4,7 @@ from plot import Plotter
 
 def main():
     pop_size = 200
-    best_p = 15
+    best_p = 20
     max_gen = 50
     p_m = 5
     g = Genetic(pop_size, best_p, max_gen, p_m)
