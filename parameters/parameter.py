@@ -5,11 +5,11 @@ import numpy as np
 class Parameter(object):
     FILE_PARAM = loadmat('mediciones.mat')
 
-    TIME = FILE_PARAM['time'][0]
-    I_ALPHA = FILE_PARAM['ia'][0]  # Stator current
-    I_BETA = FILE_PARAM['ib'][0]  # Stator current
-    CI = FILE_PARAM['ic'][0]  # Load torque
-    THETA = FILE_PARAM['vel'][0]  # Speed
+    TIME = np.asarray(FILE_PARAM['time'][0][1000:3500])
+    I_ALPHA = np.asarray(FILE_PARAM['ia'][0][1000:3500])  # Stator current
+    I_BETA = np.asarray(FILE_PARAM['ib'][0][1000:3500])  # Stator current
+    CI = np.asarray(FILE_PARAM['ic'][0][1000:3500])  # Load torque
+    THETA = np.asarray(FILE_PARAM['vel'][0][1000:3500])  # Speed
 
     P = 2  # Poles number
     U_ALPHA = 5  # Estandor's voltage
@@ -52,3 +52,7 @@ class Parameter(object):
     @staticmethod
     def get_theta(time):
         return Parameter.THETA[time]
+
+    @staticmethod
+    def get_length():
+        return len(Parameter.TIME)
