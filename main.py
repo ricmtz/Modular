@@ -3,9 +3,9 @@ from plot import Plotter
 
 
 def main():
-    pop_size = 40
-    best_p = 6
-    max_gen = 5
+    pop_size = 80
+    best_p = 10
+    max_gen = 0
     p_m = 5
     g = Genetic(pop_size, best_p, max_gen, p_m)
     print('Genetic evolution')

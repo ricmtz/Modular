@@ -25,7 +25,7 @@ class Function(object):
                               math.cos(parm.P)*theta) - parm.F/j *
                        theta - ci/j))
         w = np.asarray(w)
-        return w*.0005 - 0.05
+        return w
 
     @staticmethod
     def func_i_alpha(r, l, lam, w):
@@ -41,10 +41,10 @@ class Function(object):
         d_ia = []
         for i in range(len(parm.TIME)):
             ia = parm.get_i_alpha(i)
-            theta = parm.get_theta(i)
-            d_ia = r/l*ia+parm.P*lam/l*w*math.sin(theta)+1/l*parm.U_ALPHA
+            w = theta = parm.get_theta(i)
+            d_ia.append(r/l*ia+parm.P*lam/l*w*math.sin(theta)+1/l*parm.U_ALPHA)
         d_ia = np.asarray(d_ia)
-        return d_ia*.0005 - 4
+        return d_ia
 
     @staticmethod
     def func_i_beta(r, l, lam, w):
@@ -60,11 +60,11 @@ class Function(object):
         d_ib = []
         for i in range(len(parm.TIME)):
             ib = parm.get_i_beta(i)
-            theta = parm.get_theta(i)
-            d_ib = r/l*ib+parm.P*lam/l*w * \
-                math.cos(theta)+1/l*parm.U_BETA
+            w = theta = parm.get_theta(i)
+            d_ib.append(r/l*ib+parm.P*lam/l*w *
+                        math.cos(theta)+1/l*parm.U_BETA)
         d_ib = np.asarray(d_ib)
-        return d_ib*.0005 - 4
+        return d_ib
 
     @staticmethod
     def calc_error(r, l, j, lam):
@@ -89,7 +89,10 @@ class Function(object):
 
     @staticmethod
     def calc_values(r, l, j, lam):
-        w = Function.func_w(j, lam)
-        ia = Function.func_i_alpha(r, l, lam, w)
-        ib = Function.func_i_beta(r, l, lam, w)
+        w = (parm.THETA_S.fit_transform(
+            Function.func_w(j, lam).reshape(-1, 1))) - 0.5
+        ia = (parm.I_ALPHA_S.fit_transform(
+            Function.func_i_alpha(r, l, lam, w).reshape(-1, 1)))
+        ib = (parm.I_BETA_S.fit_transform(
+            Function.func_i_beta(r, l, lam, w).reshape(-1, 1)))
         return ia, ib, w

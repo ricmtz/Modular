@@ -14,7 +14,7 @@ class Genetic(object):
 
     def fitness_func(self, pop):
         for i in pop:
-            error = func.calc_error(*i.get_values())            
+            error = func.calc_error(*i.get_values())
             i.set_error(error)
             print(error)
 
