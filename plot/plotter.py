@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
-import numpy as np
-from parameters import Parameter as parm
+
 from parameters import Function as func
+from parameters import Parameter as parm
 
 
 class Plotter(object):
