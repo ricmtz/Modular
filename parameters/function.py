@@ -1,6 +1,7 @@
 import math
 from scipy.linalg import norm
 from .parameter import Parameter as parm
+from .scaler import Scaler as sc
 import numpy as np
 
 
@@ -89,10 +90,7 @@ class Function(object):
 
     @staticmethod
     def calc_values(r, l, j, lam):
-        w = (parm.THETA_S.fit_transform(
-            Function.func_w(j, lam).reshape(-1, 1))) - 0.5
-        ia = (parm.I_ALPHA_S.fit_transform(
-            Function.func_i_alpha(r, l, lam, w).reshape(-1, 1)))
-        ib = (parm.I_BETA_S.fit_transform(
-            Function.func_i_beta(r, l, lam, w).reshape(-1, 1)))
+        w = (sc.transform(Function.func_w(j, lam))) - 0.6
+        ia = (sc.transform(Function.func_i_alpha(r, l, lam, w)))
+        ib = (sc.transform(Function.func_i_beta(r, l, lam, w)))
         return ia, ib, w

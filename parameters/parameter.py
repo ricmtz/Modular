@@ -1,30 +1,32 @@
 from scipy.io import loadmat
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
+# from sklearn.preprocessing import MinMaxScaler
+from .scaler import Scaler as sc
+
+T_SAMPLES = 3500
+FILE_PARAM = loadmat('mediciones.mat')
 
 
 class Parameter(object):
 
-    FILE_PARAM = loadmat('mediciones.mat')
+    # I_ALPHA_S = MinMaxScaler(feature_range=(-1, 1))
+    # I_BETA_S = MinMaxScaler(feature_range=(-1, 1))
+    # THETA_S = MinMaxScaler(feature_range=(-1, 1))
+    # CI_S = MinMaxScaler(feature_range=(-1, 1))
 
-    I_ALPHA_S = MinMaxScaler(feature_range=(-1, 1))
-    I_BETA_S = MinMaxScaler(feature_range=(-1, 1))
-    THETA_S = MinMaxScaler(feature_range=(-1, 1))
-    CI_S = MinMaxScaler(feature_range=(-1, 1))
-
-    TIME = np.asarray(FILE_PARAM['time'][0][:3500])
+    TIME = np.asarray(FILE_PARAM['time'][0][:T_SAMPLES])
     # Stator current
-    I_ALPHA = np.asarray(FILE_PARAM['ia'][0][:3500])
-    I_ALPHA = I_ALPHA_S.fit_transform(I_ALPHA.reshape(-1, 1))
+    I_ALPHA = np.asarray(FILE_PARAM['ia'][0][:T_SAMPLES])
+    I_ALPHA = sc.transform(I_ALPHA)
     # Stator current
-    I_BETA = np.asarray(FILE_PARAM['ib'][0][:3500])
-    I_BETA = I_BETA_S.fit_transform(I_BETA.reshape(-1, 1))
+    I_BETA = np.asarray(FILE_PARAM['ib'][0][:T_SAMPLES])
+    I_BETA = sc.transform(I_BETA)
     # Speed
-    THETA = np.asarray(FILE_PARAM['vel'][0][:3500])
-    THETA = THETA_S.fit_transform(THETA.reshape(-1, 1))
+    THETA = np.asarray(FILE_PARAM['vel'][0][:T_SAMPLES])
+    THETA = sc.transform(THETA)
     # Load torque
-    CI = np.asarray(FILE_PARAM['ic'][0][:3500])
-    CI = CI_S.fit_transform(CI.reshape(-1, 1))
+    CI = np.asarray(FILE_PARAM['ic'][0][:T_SAMPLES])
+    CI = sc.transform(CI)
 
     P = 2  # Poles number
     U_ALPHA = 5  # Estandor's voltage
