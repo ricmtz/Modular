@@ -1,6 +1,6 @@
 import math
 from scipy.linalg import norm
-from .parameter import Parameter as parm
+from parameters import Parameter as parm
 from .scaler import Scaler as sc
 import numpy as np
 
