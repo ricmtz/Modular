@@ -1,5 +1,5 @@
 from evolutionary.genetic import Genetic
-from plot import Plotter
+from utility.plotter import Plotter
 
 
 def main():
@@ -11,8 +11,8 @@ def main():
     print('Genetic evolution')
     best, error = g.search()
     print(best.get_R(), best.get_L(), best.get_J(), best.get_LAM())
-    Plotter.plot_functions(best.get_R(), best.get_L(),
-                           best.get_J(), best.get_LAM(), error)
+    Plotter.plot_result(best.get_R(), best.get_L(),
+                           best.get_J(), best.get_LAM(), error, 'Geetic')
 
 
 if __name__ == '__main__':

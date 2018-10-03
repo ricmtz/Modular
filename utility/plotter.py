@@ -5,13 +5,10 @@ from parameters import Parameter as parm
 
 
 class Plotter(object):
-
-    PLT_S = 0
-    PLT_E = int(len(parm.I_ALPHA)/5)
-
     @staticmethod
-    def plot_functions(r, l, j, lam, error):
+    def plot_result(r, l, j, lam, error, title=''):
         time = parm.TIME
+        plt.suptitle(title)
         ax1 = plt.subplot(2, 2, 1)
         ax2 = plt.subplot(2, 2, 2)
         ax3 = plt.subplot(2, 2, 3)
@@ -28,5 +25,5 @@ class Plotter(object):
         ia, ib, w = func.calc_values(r, l, j, lam)
         ax1.plot(time, ia, 'b-')
         ax2.plot(time, ib, 'b-')
-        ax3.plot(time, w, 'b-')
+        ax3.plot(time, w, 'b-')        
         plt.show()
