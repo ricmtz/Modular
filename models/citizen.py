@@ -22,5 +22,5 @@ class Citizen(object):
         self.error = error
 
     @staticmethod
-    def create_citizen(params):
+    def create_citizen(params):        
         return Citizen(params)
