@@ -1,9 +1,8 @@
-from parameters.Functions import calc_error
+from parameters import Function as func
 
-class Population(object):
-    """docstring for Population."""
+
+class Population:
     def __init__(self, pop_size):
-        super(Population, self).__init__()
         self.population = self.create_pop(pop_size)
 
     def create_pop(self, pop_size):
@@ -13,9 +12,8 @@ class Population(object):
         pass
 
     def fitness_function(self, r, l, j, lam):
-        calc_error(r, l, j, lam)
-        pass
+        return func.calc_error(r, l, j, lam)
 
     def evaluate(self, arg):
         for citizen in self.population:
-            citizen.set_error(self.fitness_function(citizen.get_params()))
+            citizen.set_error(self.fitness_function(*citizen.get_values()))
