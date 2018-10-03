@@ -12,10 +12,11 @@ class Genetic(object):
         self.max_gen = max_gen
         self.p_m = p_m
 
-    def fitness_func(self, i_time, pop):
+    def fitness_func(self, pop):
         for i in pop:
-            error = func.calc_error(i_time, *i.get_values())
+            error = func.calc_error(*i.get_values())
             i.set_error(error)
+            print(error)
 
     def create_pop(self):
         return [Citizen() for _ in range(self.pop_size)]
@@ -55,11 +56,12 @@ class Genetic(object):
         best = None
         error = []
         pop = self.create_pop()
-        self.fitness_func(gen, pop)
+        self.fitness_func(pop)
         pop.sort(key=lambda x: x.get_error())
         best = pop[0]
         error.append(best.get_error())
         while gen < self.max_gen:
+            print('gen', gen)
             children = self.make_crossover(pop)
             if np.random.rand() * 100 < self.p_m:
                 pos = np.random.randint(self.best_p, self.pop_size)
@@ -68,7 +70,7 @@ class Genetic(object):
                 self.mutate(children[pos])
                 print(children[pos].get_values())
                 print('----------------------')
-            self.fitness_func(gen, children[self.best_p:])
+            self.fitness_func(children[self.best_p:])
             children.sort(key=lambda x: x.get_error())
             best = children[0]
             error.append(best.get_error())

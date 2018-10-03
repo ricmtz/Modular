@@ -4,8 +4,7 @@ from parameters import Parameter as parm
 
 class CitizenS(object):
 
-    BOUNDS = [(parm.R_MIN, parm.R_MAX), (parm.L_MIN, parm.L_MAX),
-              (parm.J_MIN, parm.J_MAX), (parm.LAM_MIN, parm.LAM_MAX)]
+    BOUNDS = parm.get_bounds()
 
     def __init__(self, values=None, strategy=None):
         if values:
