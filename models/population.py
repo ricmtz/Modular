@@ -18,3 +18,9 @@ class Population:
     def evaluate(self):
         for citizen in self.population:
             citizen.set_error(self.fitness_function(*citizen.get_values()))
+
+    def sort_pop(self):
+        self.population.sort(key=lambda x: x.get_error())
+
+    def get_best(self):
+        return self.population[0]
