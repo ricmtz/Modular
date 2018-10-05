@@ -15,6 +15,16 @@ class Citizen(object):
     def get_values(self):
         return self.parameters
 
+    def set_value(self, param, value=None):
+        if value:
+            if value < self.BOUNDS[param][0]:
+                value = self.BOUNDS[param][0]
+            if value > self.BOUNDS[param][1]:
+                value = self.BOUNDS[param][1]
+            self.parameters[param] = value
+        else:
+            self.parameters[param] = rand_bound(*self.BOUNDS[param])
+
     def get_error(self):
         return self.error
 
