@@ -1,6 +1,6 @@
 from models import Population
 from models import Citizen
-from utility import randint_bound, choice, rand, rand_bound
+from utility import randint_bound, choice, rand
 
 
 class PopulationGen(Population):
@@ -34,4 +34,4 @@ class PopulationGen(Population):
     def mutate(self, citizen):
         if (rand() * 100) < self.p_m:
             pos = randint_bound(4)
-            citizen.get_values()[pos] = rand_bound(*Citizen.BOUNDS[pos])
+            citizen.set_value(pos)
