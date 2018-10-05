@@ -15,3 +15,7 @@ def rand():
 
 def choice(a, size):
     return np.random.choice(a, size, replace=False)
+
+
+def rand_gaussian(mean=0.0, stdev=1.0):
+    return np.random.normal(loc=mean, scale=stdev)

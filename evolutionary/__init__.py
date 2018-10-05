@@ -1,9 +1,10 @@
-from .citizen import Citizen
-from .citizen_s import CitizenS
-from .diff_evo import DiffEvolution
-from .evolution_s import EvolutionS
-from .genetic import Genetic
+from .citizen_s import CitizenStrat
 from .pop_gen import PopulationGen
+from .pop_strat import PopulationStrat
+from .pop_dif import PopulationDif
+from .genetic import Genetic
+from .evolution_s import EvolutionStrat
+from .diff_evo import DiffEvolution
 
-__all__ = ['Citizen', 'CitizenS', 'DiffEvolution',
-           'EvolutionS', 'Genetic', 'PopulationGen']
+__all__ = ['CitizenStrat', 'PopulationGen', 'PopulationStrat',
+           'PopulationDif', 'Genetic', 'EvolutionStrat', 'DiffEvolution']

@@ -1,16 +1,17 @@
-from evolutionary.evolution_s import EvolutionS
-from plot import Plotter
+from evolutionary.evolution_s import EvolutionStrat
+from utility import Plotter
 
 
 def main():
-    max_gen = 100
+    max_gen = 2
     pop_size = 30
     num_children = 20
-    a = EvolutionS(max_gen, pop_size, num_children)
-    best, error = a.search()
-    print(best.get_R(), best.get_L(), best.get_J(), best.get_LAM())
-    Plotter.plot_functions(best.get_R(), best.get_L(),
-                           best.get_J(), best.get_LAM(), error)
+    a = EvolutionStrat(max_gen, pop_size, num_children)
+    a.search()
+    best = a.get_best()
+    print(best.get_values())
+    Plotter.plot_result(*best.get_values(), a.get_error(),
+                        'Evolution Strategies')
 
 
 if __name__ == '__main__':
