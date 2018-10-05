@@ -1,3 +1,4 @@
+from evolutionary import PopulationStrat
 
 
 class EvolutionStrat(object):
@@ -6,27 +7,32 @@ class EvolutionStrat(object):
         self.max_gen = max_gen
         self.pop_size = pop_size
         self.num_children = num_children
+        self.error = []
+        self.best = None
+
+    def get_error(self):
+        return self.error
+
+    def get_best(self):
+        return self.best
 
     def search(self):
         gen = 0
-        error = []
-        pop = self.init_pop()
-        self.fitness_function(gen, pop)
-        pop.sort(key=lambda x: x.get_error())
-        best = pop[0]
-        error.append(best.get_error())
+        self.error.clear()
+        pop = PopulationStrat(self.pop_size, self.num_children)
+        pop.evaluate()
+        pop.sort_pop()
+        self.best = pop.get_best()
+        self.error.append(self.best.get_error())
         while gen < self.max_gen:
-            children = []
-            for i in range(self.num_children):
-                children.append(self.mutate(pop[i]))
-            self.fitness_function(gen, children)
-            union = children + pop
-            union.sort(key=lambda x: x.get_error())
-            if union[0].get_error() < best.get_error():
-                best = union[0]
-            error.append(best.get_error())
-            pop = union[:self.pop_size]
+            children = pop.create_children()
+            pop.evaluate(children)
+            pop.join_pop(children)
+            pop.sort_pop()
+            if pop.get_best().get_error() < self.best.get_error():
+                self.best = pop.get_best()
+            self.error.append(self.best.get_error())
+            pop.select_pop()
             print('Gen: {}, Error:{}'.format(
-                gen, best.get_error()))
+                gen, self.best.get_error()))
             gen += 1
-        return best, error
