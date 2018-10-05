@@ -1,20 +1,14 @@
+from models import Algorithm
 from evolutionary import PopulationStrat
 
 
-class EvolutionStrat(object):
+class EvolutionStrat(Algorithm):
 
     def __init__(self, max_gen, pop_size, num_children):
+        super().__init__()
         self.max_gen = max_gen
         self.pop_size = pop_size
         self.num_children = num_children
-        self.error = []
-        self.best = None
-
-    def get_error(self):
-        return self.error
-
-    def get_best(self):
-        return self.best
 
     def search(self):
         gen = 0

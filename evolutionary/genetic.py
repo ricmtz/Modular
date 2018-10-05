@@ -1,21 +1,15 @@
+from models import Algorithm
 from evolutionary import PopulationGen
 
 
-class Genetic(object):
+class Genetic(Algorithm):
 
     def __init__(self, pop_size, best_p, max_gen, p_m):
+        super().__init__()
         self.pop_size = pop_size
         self.best_p = best_p
         self.max_gen = max_gen
         self.p_m = p_m
-        self.best = None
-        self.error = []
-
-    def get_error(self):
-        return self.error
-
-    def get_best(self):
-        return self.best
 
     def search(self):
         gen = 0
