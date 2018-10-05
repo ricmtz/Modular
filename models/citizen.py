@@ -6,10 +6,11 @@ from parameters import Parameter as parm
 class Citizen(object):
 
     BOUNDS = parm.get_bounds()
+    P_SIZE = 4
 
-    def __init__(self, params=[]):
+    def __init__(self, params=None):
         self.parameters = params if params \
-            else [rand_bound(*bound) for bound in self.BOUNDS]
+            else [rand_bound(*self.BOUNDS[i]) for i in range(self.P_SIZE)]
         self.error = np.inf
 
     def get_values(self):
@@ -30,7 +31,3 @@ class Citizen(object):
 
     def set_error(self, error):
         self.error = error
-
-    @staticmethod
-    def create_citizen(params):
-        return Citizen(params)
