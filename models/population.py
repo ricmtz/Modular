@@ -19,8 +19,11 @@ class Population:
         for citizen in pop if pop else self.population:
             citizen.set_error(self.fitness_function(*citizen.get_values()))
 
-    def sort_pop(self):
-        self.population.sort(key=lambda x: x.get_error())
+    def sort_pop(self, pop=None):
+        if pop:
+            pop.sort(key=lambda x: x.get_error())
+        else:
+            self.population.sort(key=lambda x: x.get_error())
 
     def get_best(self):
         return self.population[0]
