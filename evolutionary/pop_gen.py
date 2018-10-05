@@ -20,8 +20,6 @@ class PopulationGen(Population):
             self.mutate(child)
             children.append(child)
         self.population = self.population[:self.best_pop] + children
-        # self.evaluate()
-        # self.sort_pop()
 
     def cross(self, p1, p2):
         v_p1 = p1.get_values()
