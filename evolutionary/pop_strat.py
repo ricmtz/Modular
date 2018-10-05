@@ -16,7 +16,7 @@ class PopulationStrat(Population):
     def mutate_problem(self, vector, stdevs):
         aux = [0 for _ in range(CitizenStrat.P_SIZE)]
         for i in range(CitizenStrat.P_SIZE):
-            aux[i] = vector[i] + stdevs[i] * self.rand_gaussian()
+            aux[i] = vector[i] + stdevs[i] * rand_gaussian()
             if aux[i] < CitizenStrat.BOUNDS[i][0]:
                 aux[i] = CitizenStrat.BOUNDS[i][0]
             if aux[i] > CitizenStrat.BOUNDS[i][1]:
@@ -37,3 +37,15 @@ class PopulationStrat(Population):
             parent.get_values(), parent.get_strategy())
         strategy = self.mutate_strategy(parent.get_strategy())
         return CitizenStrat(params, strategy)
+
+    def create_children(self):
+        children = []
+        for i in range(self.num_children):
+            children.append(self.mutate(self.population[i]))
+        return children
+
+    def join_pop(self, pop):
+        self.population += pop
+
+    def select_pop(self):
+        self.population = self.population[:self.pop_size]
