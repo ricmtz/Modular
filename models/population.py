@@ -15,8 +15,8 @@ class Population:
     def fitness_function(self, r, l, j, lam):
         return func.calc_error(r, l, j, lam)
 
-    def evaluate(self):
-        for citizen in self.population:
+    def evaluate(self, pop=None):
+        for citizen in pop if pop else self.population:
             citizen.set_error(self.fitness_function(*citizen.get_values()))
 
     def sort_pop(self):
