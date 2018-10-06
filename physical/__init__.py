@@ -1,6 +1,9 @@
-from .cictizen_m import CitizenM
-from .harmony import Harmony
-from .harmony_a import HarmonyA
+from .citizen_m import CitizenMem
+from .citizen_har import CitizenHar
+from .pop_mem import PopulationMem
+from .harm_mem import HarmonyMem
 from .memetic import Memetic
+from .harmony import Harmony
 
-__all__ = ['CitizenM', 'Harmony', 'HarmonyA', 'Memetic']
+__all__ = ['CitizenMem', 'CitizenHar', 'PopulationMem',
+           'HarmonyMem', 'Memetic', 'Harmony']

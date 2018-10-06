@@ -1,50 +1,27 @@
-import numpy as np
-from parameters import Parameter as parm
+from models import Algorithm
+from physical import HarmonyMem
 
 
-class Harmony(object):
-    BOUNDS = [(parm.R_MIN, parm.R_MAX), (parm.L_MIN, parm.L_MAX),
-              (parm.J_MIN, parm.J_MAX), (parm.LAM_MIN, parm.LAM_MAX)]
+class Harmony(Algorithm):
+    def __init__(self, max_iter, pop_size, consid_r, adjust_r, ran):
+        super().__init__()
+        self.max_iter = max_iter
+        self.pop_size = pop_size
+        self.consid_r = consid_r
+        self.adjust_r = adjust_r
+        self.ran = ran
 
-    def __init__(self, values=None):
-        if values:
-            self._values = values[:]
-        else:
-            self._values = [parm.get_rand(Harmony.BOUNDS[i]) for i in range(4)]
-        self._error = np.inf
-
-    def set_R(self, r):
-        self._values[0] = r
-
-    def get_R(self):
-        return self._values[0]
-
-    def set_L(self, l):
-        self._values[1] = l
-
-    def get_L(self):
-        return self._values[1]
-
-    def set_J(self, j):
-        self._values[2] = j
-
-    def get_J(self):
-        return self._values[2]
-
-    def set_LAM(self, lam):
-        self._values[3] = lam
-
-    def get_LAM(self):
-        return self._values[3]
-
-    def set_error(self, error):
-        self._error = error
-
-    def get_error(self):
-        return self._error
-
-    def set_values(self, values):
-        self._values = values[:]
-
-    def get_values(self):
-        return self._values
+    def search(self):
+        gen = 0
+        memory = HarmonyMem(self.pop_size, self.consid_r,
+                            self.adjust_r, self.ran)
+        self.best = memory.get_best()
+        while gen < self.max_iter:
+            harm = memory.create_harmony()
+            harm.set_error(memory.fitness_function(*harm.get_values()))
+            if harm.get_error() < self.best.get_error():
+                self.best = harm
+            self.error.append(self.best.get_error())
+            memory.add_harm(harm)
+            print('gen: {}, error:{}'.format(gen, self.best.get_error()))
+            gen += 1
