@@ -57,6 +57,6 @@ class Function(object):
     @staticmethod
     def calc_values(r, l, j, lam):
         w = (sc.transform(Function.func_w(j, lam))) - 0.6
-        ia = (sc.transform(Function.func_i_alpha(r, l, lam, w)))
-        ib = (sc.transform(Function.func_i_beta(r, l, lam, w)))
+        ia = (sc.transform(Function.func_i_alpha(r, l, lam, w))) - 0.1
+        ib = (sc.transform(Function.func_i_beta(r, l, lam, w))) + 0.1
         return ia, ib, w
