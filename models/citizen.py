@@ -16,6 +16,9 @@ class Citizen(object):
     def get_values(self):
         return self.parameters
 
+    def get_value(self, pos):
+        return self.parameters[pos]
+
     def set_value(self, param, value=None):
         if value:
             if value < self.BOUNDS[param][0]:
