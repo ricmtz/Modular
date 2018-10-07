@@ -1,4 +1,4 @@
-from .cross_e import CrossE
-from .means import Means
+from .pop_cross import PopulationCross
+from .cross_e import CrossEntropy
 
-__all__ = ['CrossE', 'Means']
+__all__ = ['CrossEntropy', 'PopulationCross']
