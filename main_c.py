@@ -1,17 +1,17 @@
-from probabilistic.cross_e import CrossE
-from plot import Plotter
+from probabilistic import CrossEntropy
+from utility import Plotter
 
 
 def main():
-    max_iter = 50
-    num_samples = 100
+    max_iter = 2
+    num_samples = 50
     num_update = 10
     learning_r = 0.7
-    a = CrossE(max_iter, num_samples, num_update, learning_r)
-    best, error = a.search()
-    print(best.get_R(), best.get_L(), best.get_J(), best.get_LAM())
-    Plotter.plot_functions(best.get_R(), best.get_L(),
-                           best.get_J(), best.get_LAM(), error)
+    a = CrossEntropy(max_iter, num_samples, num_update, learning_r)
+    a.search()
+    best = a.get_best()
+    print(best.get_values())
+    Plotter.plot_result(*best.get_values(), a.get_error())
 
 
 if __name__ == '__main__':
