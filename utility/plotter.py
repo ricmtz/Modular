@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 from parameters import Function as func
 from parameters import Parameter as parm
+from utility import Saver
 
 
 class Plotter(object):
@@ -42,3 +44,15 @@ class Plotter(object):
         ax4.set_title('Evolucion')
         ax4.plot(range(len(error)), error, 'r-')
         ax4.semilogy()
+
+    @staticmethod
+    def plot_evolution():
+        data = Saver.get_results()
+        colors = iter(plt.cm.rainbow(np.linspace(0, 1, len(data))))
+        for algorithm, values in data.items():
+            cl = next(colors)
+            x = range(len(values['evolution']))
+            plt.plot(x, values['evolution'], color=cl, label=algorithm)
+        plt.semilogy()
+        plt.legend()
+        plt.show()
