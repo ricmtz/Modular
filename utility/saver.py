@@ -6,7 +6,7 @@ class Saver:
     @staticmethod
     def __load():
         data = None
-        with open('results.json') as j_file:
+        with open('results.json', 'r') as j_file:
             data = json.load(j_file)
         return data
 
