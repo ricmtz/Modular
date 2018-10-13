@@ -1,5 +1,5 @@
-from .Particle import Particle
-from .PSO import PSO
-from .util import plot_population, rand_val
+from .particle import Particle
+from .particles import Particles
+from .pso import PSO
 
-__all__ = ['Particle', 'PSO', 'plot_population', 'rand_val']
+__all__ = ['Particle', 'Particles', 'PSO']
