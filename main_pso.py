@@ -1,22 +1,16 @@
-from parameters import Parameter as parm
-from parameters import Function as func
-from plot import Plotter
-from swarm.PSO import PSO
-
-PARTICLES = 30
-DIMENSIONS = 4
-SPACE_BOUNDARIES = parm.get_bounds()
-VELOCITY_BOUNDARIES = [[-1, 1]] * DIMENSIONS
-GENERATIONS = 40
+from swarm import PSO
+from utility import Plotter
 
 
-def cost_function(i_time, values):
-    return func.calc_error(i_time, *values)
+def main():
+    pop_size = 10
+    max_gen = 2
+    a = PSO(pop_size, max_gen)
+    a.search()
+    best = a.get_best()
+    print(best.get_values())
+    Plotter.plot_result(*best.get_values(), a.get_error(), 'PSO')
 
 
 if __name__ == '__main__':
-    print(parm.get_bounds())
-    a = PSO(PARTICLES, SPACE_BOUNDARIES,
-            VELOCITY_BOUNDARIES, GENERATIONS, cost_function)
-    solution, error = a.search()
-    Plotter.plot_functions(*solution, error)
+    main()
