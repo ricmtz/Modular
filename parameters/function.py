@@ -3,8 +3,7 @@ import math
 import numpy as np
 from scipy.linalg import norm
 
-from parameters import Parameter as parm
-from parameters import Scaler as sc
+from parameters import Parameter as parm, Scaler as sc
 
 
 class Function(object):
@@ -21,28 +20,28 @@ class Function(object):
                               math.cos(parm.P)*theta) - parm.F/j *
                        theta - ci/j))
         w = np.asarray(w)
-        return w
+        return sc.transform_w(w)
 
     @staticmethod
-    def func_i_alpha(r, l, lam, w):
-        d_ia = []
+    def func_i_alpha(r, l, lam):
+        ia_p = []
         for i in range(len(parm.TIME)):
             ia = parm.get_i_alpha_at(i)
             w = theta = parm.get_theta_at(i)
-            d_ia.append(r/l*ia+parm.P*lam/l*w*math.sin(theta)+1/l*parm.U_ALPHA)
-        d_ia = np.asarray(d_ia)
-        return d_ia
+            ia_p.append(r/l*ia+parm.P*lam/l*w*math.sin(theta)+1/l*parm.U_ALPHA)
+        ia_p = np.asarray(ia_p)
+        return sc.transform_ia(ia_p)
 
     @staticmethod
-    def func_i_beta(r, l, lam, w):
-        d_ib = []
+    def func_i_beta(r, l, lam):
+        ib_p = []
         for i in range(len(parm.TIME)):
             ib = parm.get_i_beta_at(i)
             w = theta = parm.get_theta_at(i)
-            d_ib.append(r/l*ib+parm.P*lam/l*w *
+            ib_p.append(r/l*ib+parm.P*lam/l*w *
                         math.cos(theta)+1/l*parm.U_BETA)
-        d_ib = np.asarray(d_ib)
-        return d_ib
+        ib_p = np.asarray(ib_p)
+        return sc.transform_ib(ib_p)
 
     @staticmethod
     def calc_error(r, l, j, lam):
@@ -56,7 +55,7 @@ class Function(object):
 
     @staticmethod
     def calc_values(r, l, j, lam):
-        w = (sc.transform(Function.func_w(j, lam))) - 0.6
-        ia = (sc.transform(Function.func_i_alpha(r, l, lam, w))) - 0.1
-        ib = (sc.transform(Function.func_i_beta(r, l, lam, w))) + 0.1
+        w = Function.func_w(j, lam) - 1.9
+        ia = Function.func_i_alpha(r, l, lam) - 0.2
+        ib = Function.func_i_beta(r, l, lam) - 0.1
         return ia, ib, w
