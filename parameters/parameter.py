@@ -1,9 +1,8 @@
 import numpy as np
 from scipy.io import loadmat
 
-from parameters import Scaler as sc
 
-SAMPLES = 3500
+SAMPLES = 3600
 FILE_PARAM = loadmat('mediciones.mat')
 
 # Search space of the parameters
@@ -18,16 +17,16 @@ LAM_MAX = 0.1107
 
 
 def get_param(name):
-    return np.asarray(FILE_PARAM[name][0][:SAMPLES])
+    return np.asarray(FILE_PARAM[name][0][:SAMPLES]).reshape(-1, 1)
 
 
 class Parameter:
     # Parameters from file.
-    TIME = np.asarray(get_param('time'))
-    I_ALPHA = sc.transform(get_param('ia'))
-    I_BETA = sc.transform(get_param('ib'))
-    THETA = sc.transform(get_param('vel'))
-    CI = sc.transform(get_param('ic'))
+    TIME = get_param('time')
+    I_ALPHA = get_param('ia')
+    I_BETA = get_param('ib')
+    THETA = get_param('vel')
+    CI = get_param('ic')
 
     P = 2  # Poles number
     U_ALPHA = 5  # Estandor's voltage
@@ -36,11 +35,6 @@ class Parameter:
 
     BOUNDS = [(R_MIN, R_MAX), (L_MIN, L_MAX),
               (J_MIN, J_MAX), (LAM_MIN, LAM_MAX)]
-
-    @staticmethod
-    def get_rand(bounds):
-
-        return np.random.uniform(*bounds)
 
     @staticmethod
     def get_bounds():
