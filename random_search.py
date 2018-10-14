@@ -1,14 +1,19 @@
 from stochastic import RandomSearch
-from utility import Plotter
+from utility import Plotter, Saver
+
+ALGORITHM = 'Random Search'
 
 
 def main():
     max_gen = 50
-    g = RandomSearch(max_gen)
-    g.search()
-    best = g.get_best()
-    print(*best.get_values())
-    Plotter.plot_result(*best.get_values(), g.get_error(), 'Random Search')
+    a = RandomSearch(max_gen)
+    print(ALGORITHM.center(50, '-'))
+    a.search()
+    best = a.get_best()
+    print(''.center(50, '-'))
+    print('Results: ', best.get_values())
+    Plotter.plot_result(*best.get_values(), a.get_error(), ALGORITHM)
+    Saver.save_results(ALGORITHM, best.get_values(), a.get_error())
 
 
 if __name__ == '__main__':

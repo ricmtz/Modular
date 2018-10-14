@@ -1,5 +1,7 @@
 from evolutionary.genetic import Genetic
-from utility import Plotter
+from utility import Plotter, Saver
+
+ALGORITHM = 'Genetic Evolution'
 
 
 def main():
@@ -7,13 +9,14 @@ def main():
     best_p = 10
     max_gen = 2
     p_m = 5
-    g = Genetic(pop_size, best_p, max_gen, p_m)
-    print('Genetic evolution')
-    g.search()
-    best = g.get_best()
-    error = g.get_error()
-    print(best.get_values())
-    Plotter.plot_result(*best.get_values(), error, 'Genetic')
+    a = Genetic(pop_size, best_p, max_gen, p_m)
+    print(ALGORITHM.center(50, '-'))
+    a.search()
+    best = a.get_best()
+    print(''.center(50, '-'))
+    print('Results: ', best.get_values())
+    Plotter.plot_result(*best.get_values(), a.get_error(), ALGORITHM)
+    Saver.get_results(ALGORITHM, best.get_values(), a.get_error())
 
 
 if __name__ == '__main__':
