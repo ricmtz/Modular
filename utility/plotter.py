@@ -21,22 +21,25 @@ class Plotter(object):
     def __plot_ia(ia):
         ia_plt = plt.subplot(2, 2, 1)
         ia_plt.set_title('Alpha')
-        ia_plt.plot(parm.TIME, parm.I_ALPHA, 'r-')
-        ia_plt.plot(parm.TIME, ia, 'b-')
+        ia_plt.plot(parm.TIME, parm.I_ALPHA, 'r-', label='Original')
+        ia_plt.plot(parm.TIME, ia, 'b-', label='Predict')
+        ia_plt.legend()
 
     @staticmethod
     def __plot_ib(ib):
-        ax2 = plt.subplot(2, 2, 2)
-        ax2.set_title('Beta')
-        ax2.plot(parm.TIME, parm.I_BETA, 'r-')
-        ax2.plot(parm.TIME, ib, 'b-')
+        ib_plt = plt.subplot(2, 2, 2)
+        ib_plt.set_title('Beta')
+        ib_plt.plot(parm.TIME, parm.I_BETA, 'r-', label='Original')
+        ib_plt.plot(parm.TIME, ib, 'b-', label='Predict')
+        ib_plt.legend()
 
     @staticmethod
     def __plot_w(w):
-        ax3 = plt.subplot(2, 2, 3)
-        ax3.set_title('W')
-        ax3.plot(parm.TIME, parm.THETA, 'r-')
-        ax3.plot(parm.TIME, w, 'b-')
+        w_plt = plt.subplot(2, 2, 3)
+        w_plt.set_title('W')
+        w_plt.plot(parm.TIME, parm.THETA, 'r-', label='Original')
+        w_plt.plot(parm.TIME, w, 'b-', label='Predict')
+        w_plt.legend()
 
     @staticmethod
     def __plot_error(error):
