@@ -16,11 +16,12 @@ class Saver:
             json.dump(data, j_file)
 
     @staticmethod
-    def save_results(algorithm='', params=[], evolution=[]):
+    def save_results(algorithm='', params=[], evolution=[], time=0):
         data = Saver.__load()
         data[algorithm] = {
             'params': params,
-            'evolution': evolution
+            'evolution': evolution,
+            'time': time
         }
         Saver.__save(data)
 
