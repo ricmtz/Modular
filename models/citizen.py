@@ -9,7 +9,7 @@ class Citizen(object):
     P_SIZE = 4
 
     def __init__(self, params=None):
-        self.parameters = params if params \
+        self.parameters = params.copy() if params \
             else [rand_bound(*self.BOUNDS[i]) for i in range(self.P_SIZE)]
         self.error = np.inf
 
