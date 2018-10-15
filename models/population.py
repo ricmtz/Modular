@@ -26,4 +26,4 @@ class Population:
             self.population.sort(key=lambda x: x.get_error())
 
     def get_best(self):
-        return self.population[0]
+        return min(self.population, key=lambda x: x.get_error())
