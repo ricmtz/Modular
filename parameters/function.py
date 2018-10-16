@@ -3,7 +3,10 @@ import math
 import numpy as np
 from scipy.linalg import norm
 
-from parameters import Parameter as parm, Scaler as sc
+from parameters import Parameter as parm
+
+
+SCALER = 0.00014
 
 
 class Function(object):
@@ -20,7 +23,7 @@ class Function(object):
                               math.cos(parm.P)*theta) - parm.F/j *
                        theta - ci/j))
         w = np.asarray(w)
-        return sc.transform_w(w)
+        return w * SCALER
 
     @staticmethod
     def func_i_alpha(r, l, lam):
@@ -30,7 +33,7 @@ class Function(object):
             w = theta = parm.get_theta_at(i)
             ia_p.append(r/l*ia+parm.P*lam/l*w*math.sin(theta)+1/l*parm.U_ALPHA)
         ia_p = np.asarray(ia_p)
-        return sc.transform_ia(ia_p)
+        return ia_p * SCALER
 
     @staticmethod
     def func_i_beta(r, l, lam):
@@ -41,7 +44,7 @@ class Function(object):
             ib_p.append(r/l*ib+parm.P*lam/l*w *
                         math.cos(theta)+1/l*parm.U_BETA)
         ib_p = np.asarray(ib_p)
-        return sc.transform_ib(ib_p)
+        return ib_p * SCALER
 
     @staticmethod
     def calc_error(r, l, j, lam):
@@ -55,7 +58,7 @@ class Function(object):
 
     @staticmethod
     def calc_values(r, l, j, lam):
-        w = Function.func_w(j, lam) - 1.9
-        ia = Function.func_i_alpha(r, l, lam) - 0.2
-        ib = Function.func_i_beta(r, l, lam) - 0.1
+        w = Function.func_w(j, lam)
+        ia = Function.func_i_alpha(r, l, lam) - 6
+        ib = Function.func_i_beta(r, l, lam) - 6
         return ia, ib, w
