@@ -3,7 +3,7 @@ from utility import Runner
 
 
 def main():
-    max_gen = 50
+    max_gen = 10
     init_factor = 0.05
     s_factor = 1.3
     l_factor = 3.0
