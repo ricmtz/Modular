@@ -1,4 +1,5 @@
-from .algorithm import Algorithm
-from .population import Population
+from .cell import Cell
+from .pop_imm_net import PopulationImmuneNet
+from .immune_network import ImmuneNetwork
 
-__all__ = ['Algorithm', 'Population']
+__all__ = ['Cell', 'PopulationImmuneNet', 'ImmuneNetwork']
