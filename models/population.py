@@ -27,3 +27,6 @@ class Population:
 
     def get_best(self):
         return min(self.population, key=lambda x: x.get_error())
+
+    def get_worst(self):
+        return max(self.population, key=lambda x: x.get_error())
