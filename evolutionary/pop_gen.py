@@ -12,11 +12,16 @@ class PopulationGen(Population):
     def create_pop(self):
         return [Citizen() for _ in range(self.pop_size)]
 
-    def make_crossover(self):
+    def make_crossover(self, pop=[]):
         children = []
         for _ in range(self.best_pop, self.pop_size):
-            p1, p2 = self.select_parents()
-            child = self.cross(self.population[p1], self.population[p2])
+            child = []
+            if pop:
+                p1, p2 = self.select_parents(len(pop))
+                child = self.cross(pop[p1], pop[p2])
+            else:
+                p1, p2 = self.select_parents()
+                child = self.cross(self.population[p1], self.population[p2])
             self.mutate(child)
             children.append(child)
         self.population = self.population[:self.best_pop] + children
@@ -28,10 +33,13 @@ class PopulationGen(Population):
         v_child = v_p1[:cut_p] + v_p2[cut_p:]
         return Citizen(v_child)
 
-    def select_parents(self):
-        return choice(self.best_pop, 2)
+    def select_parents(self, len_pop=0):
+        return choice(len_pop if len_pop else self.best_pop, 2)
 
     def mutate(self, citizen):
         if (rand() * 100) < self.p_m:
             pos = randint_bound(4)
             citizen.set_value(pos)
+
+    def get_best_pop(self):
+        return self.population[:self.best_pop]
