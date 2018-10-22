@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QLineEdit
+from PyQt5.QtWidgets import QLabel, QLineEdit, QMessageBox
 from ui.model import Form
 from probabilistic import CrossEntropy
 from utility import Runner
@@ -24,10 +24,15 @@ class UICrossEntropy(Form):
         self.form.addRow(QLabel('Learning rate:'), self.learning_r)
 
     def run_algorithm(self):
-        max_gen = int(self.max_gen.text())
-        num_samples = int(self.num_samples.text())
-        num_update = int(self.num_update.text())
-        learning_r = float(self.learning_r.text())
-        algorithm = CrossEntropy(max_gen, num_samples, num_update, learning_r)
-        val, t_time = Runner.run_algorithm(algorithm, self.title)
-        self.print_results(val, t_time)
+        try:
+            max_gen = int(self.max_gen.text())
+            num_samples = int(self.num_samples.text())
+            num_update = int(self.num_update.text())
+            learning_r = float(self.learning_r.text())
+            algorithm = CrossEntropy(
+                max_gen, num_samples, num_update, learning_r)
+            val, t_time = Runner.run_algorithm(algorithm, self.title)
+            self.print_results(val, t_time)
+        except ValueError as error:
+            QMessageBox.warning(self, 'Value error',
+                                'Invalid input:'+str(error))

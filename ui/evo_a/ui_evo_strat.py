@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QLineEdit
+from PyQt5.QtWidgets import QLabel, QLineEdit, QMessageBox
 from ui.model import Form
 from evolutionary import EvolutionStrat
 from utility import Runner
@@ -21,9 +21,13 @@ class UIEvolutionStrat(Form):
         self.form.addRow(QLabel('Num. children:'), self.num_children)
 
     def run_algorithm(self):
-        max_gen = int(self.max_gen.text())
-        pop_size = int(self.pop_size.text())
-        num_children = int(self.num_children.text())
-        algorithm = EvolutionStrat(max_gen, pop_size, num_children)
-        val, t_time = Runner.run_algorithm(algorithm, self.title)
-        self.print_results(val, t_time)
+        try:
+            max_gen = int(self.max_gen.text())
+            pop_size = int(self.pop_size.text())
+            num_children = int(self.num_children.text())
+            algorithm = EvolutionStrat(max_gen, pop_size, num_children)
+            val, t_time = Runner.run_algorithm(algorithm, self.title)
+            self.print_results(val, t_time)
+        except ValueError as error:
+            QMessageBox.warning(self, 'Value error',
+                                'Invalid input:'+str(error))

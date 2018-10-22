@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QLineEdit
+from PyQt5.QtWidgets import QLabel, QLineEdit, QMessageBox
 from ui.model import Form
 from stochastic import AdaptativeRandomS
 from utility import Runner
@@ -30,13 +30,17 @@ class UIAdaptativeRandomS(Form):
         self.form.addRow(QLabel('Max. number of changes:'), self.max_no_impr)
 
     def run_algorithm(self):
-        max_gen = int(self.max_gen.text())
-        init_f = float(self.init_f.text())
-        s_factor = float(self.s_factor.text())
-        l_factor = float(self.l_factor.text())
-        iter_mult = int(self.iter_mult.text())
-        max_no_impr = int(self.max_no_impr.text())
-        algorithm = AdaptativeRandomS(
-            max_gen, init_f, s_factor, l_factor, iter_mult, max_no_impr)
-        val, t_time = Runner.run_algorithm(algorithm, self.title)
-        self.print_results(val, t_time)
+        try:
+            max_gen = int(self.max_gen.text())
+            init_f = float(self.init_f.text())
+            s_factor = float(self.s_factor.text())
+            l_factor = float(self.l_factor.text())
+            iter_mult = int(self.iter_mult.text())
+            max_no_impr = int(self.max_no_impr.text())
+            algorithm = AdaptativeRandomS(
+                max_gen, init_f, s_factor, l_factor, iter_mult, max_no_impr)
+            val, t_time = Runner.run_algorithm(algorithm, self.title)
+            self.print_results(val, t_time)
+        except ValueError as error:
+            QMessageBox.warning(self, 'Value error',
+                                'Invalid input:'+str(error))

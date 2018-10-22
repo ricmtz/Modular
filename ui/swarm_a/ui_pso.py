@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QLineEdit
+from PyQt5.QtWidgets import QLabel, QLineEdit, QMessageBox
 from ui.model import Form
 from swarm import PSO
 from utility import Runner
@@ -18,8 +18,12 @@ class UIPSO(Form):
         self.form.addRow(QLabel('Num. particles:'), self.pop_size)
 
     def run_algorithm(self):
-        max_gen = int(self.max_gen.text())
-        pop_size = int(self.pop_size.text())
-        algorithm = PSO(pop_size, max_gen)
-        val, t_time = Runner.run_algorithm(algorithm, self.title)
-        self.print_results(val, t_time)
+        try:
+            max_gen = int(self.max_gen.text())
+            pop_size = int(self.pop_size.text())
+            algorithm = PSO(pop_size, max_gen)
+            val, t_time = Runner.run_algorithm(algorithm, self.title)
+            self.print_results(val, t_time)
+        except ValueError as error:
+            QMessageBox.warning(self, 'Value error',
+                                'Invalid input:'+str(error))

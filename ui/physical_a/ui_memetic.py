@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QLineEdit
+from PyQt5.QtWidgets import QLabel, QLineEdit, QMessageBox
 from ui.model import Form
 from physical import Memetic
 from utility import Runner
@@ -30,13 +30,17 @@ class UIMemetic(Form):
         self.form.addRow(QLabel('P. local:'), self.p_local)
 
     def run_algorithm(self):
-        max_gen = int(self.max_gen.text())
-        pop_size = int(self.pop_size.text())
-        p_cross = float(self.p_cross.text())
-        max_local_gens = int(self.max_local_gens.text())
-        p_mut = float(self.p_mut.text())
-        p_local = float(self.p_local.text())
-        algorithm = Memetic(max_gen, pop_size, p_cross,
-                            p_mut, max_local_gens, p_local)
-        val, t_time = Runner.run_algorithm(algorithm, self.title)
-        self.print_results(val, t_time)
+        try:
+            max_gen = int(self.max_gen.text())
+            pop_size = int(self.pop_size.text())
+            p_cross = float(self.p_cross.text())
+            max_local_gens = int(self.max_local_gens.text())
+            p_mut = float(self.p_mut.text())
+            p_local = float(self.p_local.text())
+            algorithm = Memetic(max_gen, pop_size, p_cross,
+                                p_mut, max_local_gens, p_local)
+            val, t_time = Runner.run_algorithm(algorithm, self.title)
+            self.print_results(val, t_time)
+        except ValueError as error:
+            QMessageBox.warning(self, 'Value error',
+                                'Invalid input:'+str(error))

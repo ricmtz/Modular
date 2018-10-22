@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QLineEdit
+from PyQt5.QtWidgets import QLabel, QLineEdit, QMessageBox
 from ui.model import Form
 from immune import ClonalSelection
 from utility import Runner
@@ -24,10 +24,14 @@ class UIClonalSelection(Form):
         self.form.addRow(QLabel('Num. random insertions:'), self.num_rand)
 
     def run_algorithm(self):
-        max_gen = int(self.max_gen.text())
-        pop_size = int(self.pop_size.text())
-        clone_f = float(self.clone_f.text())
-        num_rand = int(self.num_rand.text())
-        algorithm = ClonalSelection(max_gen, pop_size, clone_f, num_rand)
-        val, t_time = Runner.run_algorithm(algorithm, self.title)
-        self.print_results(val, t_time)
+        try:
+            max_gen = int(self.max_gen.text())
+            pop_size = int(self.pop_size.text())
+            clone_f = float(self.clone_f.text())
+            num_rand = int(self.num_rand.text())
+            algorithm = ClonalSelection(max_gen, pop_size, clone_f, num_rand)
+            val, t_time = Runner.run_algorithm(algorithm, self.title)
+            self.print_results(val, t_time)
+        except ValueError as error:
+            QMessageBox.warning(self, 'Value error',
+                                'Invalid input:'+str(error))

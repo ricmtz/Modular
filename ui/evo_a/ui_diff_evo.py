@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QLineEdit
+from PyQt5.QtWidgets import QLabel, QLineEdit, QMessageBox
 from ui.model import Form
 from evolutionary import DiffEvolution
 from utility import Runner
@@ -24,10 +24,14 @@ class UIDiffEvolution(Form):
         self.form.addRow(QLabel('Crossover rate:'), self.cross_r)
 
     def run_algorithm(self):
-        max_gen = int(self.max_gen.text())
-        pop_size = int(self.pop_size.text())
-        weight_f = float(self.weight_f.text())
-        cross_r = float(self.cross_r.text())
-        algorithm = DiffEvolution(max_gen, pop_size, weight_f, cross_r)
-        val, t_time = Runner.run_algorithm(algorithm, self.title)
-        self.print_results(val, t_time)
+        try:
+            max_gen = int(self.max_gen.text())
+            pop_size = int(self.pop_size.text())
+            weight_f = float(self.weight_f.text())
+            cross_r = float(self.cross_r.text())
+            algorithm = DiffEvolution(max_gen, pop_size, weight_f, cross_r)
+            val, t_time = Runner.run_algorithm(algorithm, self.title)
+            self.print_results(val, t_time)
+        except ValueError as error:
+            QMessageBox.warning(self, 'Value error',
+                                'Invalid input:'+str(error))

@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel, QLineEdit
+from PyQt5.QtWidgets import QLabel, QLineEdit, QMessageBox
 from ui.model import Form
 from evolutionary import Genetic
 from utility import Runner
@@ -24,10 +24,14 @@ class UIGenetic(Form):
         self.form.addRow(QLabel('Percent mutant:'), self.p_m)
 
     def run_algorithm(self):
-        pop_size = int(self.pop_size.text())
-        best_p = int(self.best_pop.text())
-        max_gen = int(self.max_gen.text())
-        p_m = float(self.p_m.text())
-        algorithm = Genetic(pop_size, best_p, max_gen, p_m)
-        val, t_time = Runner.run_algorithm(algorithm, self.title)
-        self.print_results(val, t_time)
+        try:
+            pop_size = int(self.pop_size.text())
+            best_p = int(self.best_pop.text())
+            max_gen = int(self.max_gen.text())
+            p_m = float(self.p_m.text())
+            algorithm = Genetic(pop_size, best_p, max_gen, p_m)
+            val, t_time = Runner.run_algorithm(algorithm, self.title)
+            self.print_results(val, t_time)
+        except ValueError as error:
+            QMessageBox.warning(self, 'Value error',
+                                'Invalid input:'+str(error))
