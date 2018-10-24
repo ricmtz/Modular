@@ -15,11 +15,11 @@ class Runner:
         best = algorithm.get_best()
         total_time = time.strftime('%M:%S', time.gmtime(finish - start))
         print(''.center(WIDTH_TXT, FILL_CHR))
-        print('Results'.center(WIDTH_TXT, FILL_CHR))
-        print(
-            'R:{}, L:{}, J:{}, Lambda:{}'.format(*best.get_values()))
-        print('Time: {}'.format(total_time))
-        print(''.center(WIDTH_TXT, FILL_CHR))
+        # print('Results'.center(WIDTH_TXT, FILL_CHR))
+        # print(
+        #     'R:{}, L:{}, J:{}, Lambda:{}'.format(*best.get_values()))
+        # print('Time: {}'.format(total_time))
+        # print(''.center(WIDTH_TXT, FILL_CHR))
         Plotter.plot_result(*best.get_values(), algorithm.get_error(), name)
         Saver.save_results(name, best.get_values(),
                            algorithm.get_error(), total_time)
@@ -34,12 +34,12 @@ class Runner:
         bests = algorithm.get_bests()
         total_time = time.strftime('%M:%S', time.gmtime(finish - start))
         print(''.center(WIDTH_TXT, FILL_CHR))
-        print('Results'.center(WIDTH_TXT, FILL_CHR))
-        for i, best in bests.items():
-            print('id: {}, R:{}, L:{}, J:{}, Lambda:{}'.format(
-                i, *best.get_values()))
-        print('Time: {}'.format(total_time))
-        print(''.center(WIDTH_TXT, FILL_CHR))
+        # print('Results'.center(WIDTH_TXT, FILL_CHR))
+        # for i, best in bests.items():
+        #     print('id: {}, R:{}, L:{}, J:{}, Lambda:{}'.format(
+        #         i, *best.get_values()))
+        # print('Time: {}'.format(total_time))
+        # print(''.center(WIDTH_TXT, FILL_CHR))
         best = min(bests.values(), key=lambda x: x.get_error())
         Plotter.plot_result_p(*best.get_values(), algorithm.get_errors(), name)
         return bests, total_time
